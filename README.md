@@ -595,4 +595,152 @@ mvn spring-boot:run
 # Run on different port
 mvn spring-boot:run -Dspring-boot.run.arguments="--server.port=8081"
 ```
+## 🌐 Complete SafaiMitra Application URLs
 
+---
+
+## 🔐 Authentication Pages
+
+| Page | URL | Description |
+| :--- | :--- | :--- |
+| Login | `http://localhost:8080/login` | User & Admin Login |
+| Register | `http://localhost:8080/register` | New User Registration |
+| Admin Register | `http://localhost:8080/register-admin` | New Admin Registration |
+| Create Admin (Quick) | `http://localhost:8080/create-admin` | Quick Admin Creation |
+| Logout | `http://localhost:8080/logout` | Logout User/Admin |
+
+---
+
+## 🏠 User Pages
+
+| Page | URL | Description |
+| :--- | :--- | :--- |
+| Homepage | `http://localhost:8080/` | Main Dashboard |
+| Profile | `http://localhost:8080/profile` | User Profile Management |
+| My Schedule | `http://localhost:8080/my-schedule` | View All Bookings |
+| Edit Booking | `http://localhost:8080/booking/edit/{id}` | Edit Specific Booking |
+| Cancel Booking | `http://localhost:8080/booking/cancel/{id}` | Cancel Specific Booking |
+
+---
+
+## 📅 Booking Service Pages
+
+| Page | URL | Description |
+| :--- | :--- | :--- |
+| Schedule Pickup | `http://localhost:8080/schedule` | Book Waste Pickup |
+| Request Cleaner | `http://localhost:8080/cleaner/request` | Book Cleaning Service |
+| Emergency | `http://localhost:8080/emergency` | Emergency Services (Ambulance/Fire) |
+| Special Disposal | `http://localhost:8080/disposal/special` | Special Waste Disposal |
+| Subscription | `http://localhost:8080/subscription` | View Subscription Plans |
+
+---
+
+## 👑 Admin Pages
+
+| Page | URL | Description |
+| :--- | :--- | :--- |
+| Admin Dashboard | `http://localhost:8080/admin/dashboard` | Admin Main Dashboard |
+| Manage Users | `http://localhost:8080/admin/users` | View All Users |
+| Manage Bookings | `http://localhost:8080/admin/bookings` | View All Bookings |
+| Approve Booking | `http://localhost:8080/admin/approve/{id}` | Approve Specific Booking |
+| Reject Booking | `http://localhost:8080/admin/reject/{id}` | Reject Specific Booking |
+| Delete User | `http://localhost:8080/admin/delete-user/{id}` | Delete Specific User |
+| User Details (AJAX) | `http://localhost:8080/admin/user/{id}` | View User Profile (JSON) |
+
+---
+
+## 📝 Complete URL List (Copy-Paste Ready)
+
+```
+============================================================
+🔐 AUTHENTICATION PAGES
+============================================================
+Login:               http://localhost:8080/login
+Register:            http://localhost:8080/register
+Admin Register:      http://localhost:8080/register-admin
+Create Admin:        http://localhost:8080/create-admin
+Logout:              http://localhost:8080/logout
+
+============================================================
+🏠 USER PAGES
+============================================================
+Homepage:            http://localhost:8080/
+Profile:             http://localhost:8080/profile
+My Schedule:         http://localhost:8080/my-schedule
+
+============================================================
+📅 BOOKING PAGES
+============================================================
+Schedule Pickup:     http://localhost:8080/schedule
+Request Cleaner:     http://localhost:8080/cleaner/request
+Emergency:           http://localhost:8080/emergency
+Special Disposal:    http://localhost:8080/disposal/special
+Subscription:        http://localhost:8080/subscription
+
+============================================================
+👑 ADMIN PAGES
+============================================================
+Admin Dashboard:     http://localhost:8080/admin/dashboard
+Manage Users:        http://localhost:8080/admin/users
+Manage Bookings:     http://localhost:8080/admin/bookings
+
+============================================================
+🔧 DYNAMIC PAGES (Replace {id} with actual ID)
+============================================================
+Edit Booking:        http://localhost:8080/booking/edit/1
+Cancel Booking:      http://localhost:8080/booking/cancel/1
+Approve Booking:     http://localhost:8080/admin/approve/1
+Reject Booking:      http://localhost:8080/admin/reject/1
+Delete User:         http://localhost:8080/admin/delete-user/1
+View User Details:   http://localhost:8080/admin/user/1
+```
+
+---
+
+## 🔑 Login Credentials
+
+| Role | Email | Password |
+| :--- | :--- | :--- |
+| **Admin** | `admin@safaimitra.com` | `admin123` |
+| **User** | `onkar@safaimitra.com` | `admin123` |
+| **User** | `sarang@safaimitra.com` | `admin123` |
+| **User** | `priya@safaimitra.com` | `admin123` |
+
+---
+
+## 🚀 How to Use Dynamic URLs (with ID)
+
+### Example 1: Edit Booking
+```
+http://localhost:8080/booking/edit/1
+```
+Yahan `1` booking ID hai.
+
+### Example 2: Cancel Booking
+```
+http://localhost:8080/booking/cancel/1
+```
+Yahan `1` booking ID hai.
+
+### Example 3: Admin Approve/Reject
+```
+http://localhost:8080/admin/approve/1
+http://localhost:8080/admin/reject/1
+```
+Yahan `1` booking ID hai.
+
+---
+
+## 💡 Quick Access
+
+| Page | Quick URL |
+| :--- | :--- |
+| Admin Dashboard | `http://localhost:8080/admin/dashboard` |
+| Login | `http://localhost:8080/login` |
+| Register | `http://localhost:8080/register` |
+| Homepage | `http://localhost:8080/` |
+| My Schedule | `http://localhost:8080/my-schedule` |
+
+---
+
+**Ab browser mein in URLs ko directly paste karo! 😊**
