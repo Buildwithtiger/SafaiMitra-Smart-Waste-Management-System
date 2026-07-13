@@ -1,0 +1,1004 @@
+/* ================================================================
+   SAF AIMITRA - COMPLETE STYLESHEET
+   Includes: Global, Navbar, Homepage, Schedule, Cleaner, Profile, Admin
+   ================================================================ */
+
+/* ================================================================
+   1. GLOBAL STYLES
+   ================================================================ */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background: #f0f2f5;
+    color: #333333;
+    font-family: 'Poppins', 'Segoe UI', sans-serif;
+    overflow-x: hidden;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 8px; }
+::-webkit-scrollbar-track { background: #f0f2f5; }
+::-webkit-scrollbar-thumb { background: #28a745; border-radius: 10px; }
+::-webkit-scrollbar-thumb:hover { background: #218838; }
+
+::selection {
+    background: #28a745;
+    color: #ffffff;
+}
+
+/* ================================================================
+   2. NAVBAR STYLES (Common for all pages)
+   ================================================================ */
+.navbar {
+    background: #ffffff !important;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+    padding: 0.8rem 2rem;
+}
+.navbar-brand {
+    color: #28a745 !important;
+    font-weight: 700;
+    font-size: 1.6rem;
+}
+.navbar-brand .icon {
+    color: #28a745;
+}
+.navbar .btn-outline-primary {
+    border-color: #28a745;
+    color: #28a745;
+}
+.navbar .btn-outline-primary:hover {
+    background: #28a745;
+    color: white;
+}
+.navbar .btn-outline-success {
+    border-color: #28a745;
+    color: #28a745;
+}
+.navbar .btn-outline-success:hover {
+    background: #28a745;
+    color: white;
+}
+.dropdown-menu {
+    border-radius: 10px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+}
+.dropdown-item.text-danger:hover {
+    background: #fee2e2;
+}
+
+/* ================================================================
+   3. COMMON FORM STYLES
+   ================================================================ */
+.form-label {
+    font-weight: 600;
+    color: #444444;
+    font-size: 0.9rem;
+    margin-bottom: 6px;
+}
+.form-label .required {
+    color: #dc3545;
+    margin-left: 3px;
+}
+.form-control,
+.form-select {
+    background: #f8f9fa;
+    color: #333333;
+    border: 1.5px solid #e0e0e0;
+    border-radius: 10px;
+    padding: 12px 16px;
+    font-size: 0.95rem;
+    transition: all 0.3s ease;
+}
+.form-control:focus,
+.form-select:focus {
+    border-color: #28a745;
+    box-shadow: 0 0 0 3px rgba(40,167,69,0.12);
+    background: #ffffff;
+}
+.form-control::placeholder {
+    color: #aaaaaa;
+}
+textarea.form-control {
+    resize: vertical;
+    min-height: 100px;
+}
+
+/* ================================================================
+   4. COMMON BUTTONS
+   ================================================================ */
+.btn-success {
+    background: #28a745;
+    border: none;
+    padding: 14px;
+    font-weight: 700;
+    font-size: 1.05rem;
+    border-radius: 12px;
+    transition: all 0.3s ease;
+}
+.btn-success:hover {
+    background: #218838;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(40,167,69,0.3);
+}
+.btn-success i {
+    margin-right: 8px;
+}
+
+.btn-primary {
+    background: #0d6efd;
+    border: none;
+    padding: 14px;
+    font-weight: 700;
+    font-size: 1.05rem;
+    border-radius: 12px;
+    transition: all 0.3s ease;
+}
+.btn-primary:hover {
+    background: #0b5ed7;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(13,110,253,0.3);
+}
+.btn-primary i {
+    margin-right: 8px;
+}
+
+.btn-danger {
+    background: #dc3545;
+    border: none;
+    padding: 10px 20px;
+    font-weight: 600;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+}
+.btn-danger:hover {
+    background: #c82333;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(220,53,69,0.3);
+}
+
+/* ================================================================
+   5. COMMON CARDS
+   ================================================================ */
+.card-wrapper {
+    max-width: 600px;
+    margin: 40px auto;
+    padding: 0 20px;
+}
+.form-card {
+    background: #ffffff;
+    padding: 35px 40px;
+    border-radius: 20px;
+    border: none;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.08);
+    transition: all 0.3s ease;
+}
+.form-card:hover {
+    box-shadow: 0 15px 60px rgba(0,0,0,0.12);
+    transform: translateY(-3px);
+}
+.form-card h3 {
+    font-weight: 700;
+    margin-bottom: 5px;
+}
+.form-card .subtitle {
+    color: #888888;
+    font-size: 0.95rem;
+    text-align: center;
+    margin-bottom: 25px;
+}
+.form-card hr {
+    border-color: #e8e8e8;
+    margin-bottom: 25px;
+}
+
+/* ================================================================
+   6. ALERTS
+   ================================================================ */
+.alert-success {
+    background: #d4edda;
+    color: #155724;
+    border: 1px solid #c3e6cb;
+    border-radius: 12px;
+    padding: 15px 20px;
+    font-weight: 500;
+}
+.alert-danger {
+    background: #f8d7da;
+    color: #721c24;
+    border: 1px solid #f5c6cb;
+    border-radius: 12px;
+    padding: 15px 20px;
+    font-weight: 500;
+}
+.alert-info {
+    background: #d1ecf1;
+    color: #0c5460;
+    border: 1px solid #bee5eb;
+    border-radius: 12px;
+    padding: 15px 20px;
+    font-weight: 500;
+}
+
+/* ================================================================
+   7. HERO SECTION (Homepage)
+   ================================================================ */
+.hero {
+    position: relative;
+    min-height: 500px;
+    border-radius: 25px;
+    overflow: hidden;
+    margin: 20px 25px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+.hero::after {
+    content: "";
+    background: rgba(0, 0, 0, 0.5);
+    position: absolute;
+    inset: 0;
+    border-radius: 25px;
+}
+.hero .content {
+    position: relative;
+    z-index: 1;
+    color: white;
+    padding: 40px 20px;
+    width: 100%;
+    max-width: 800px;
+    margin: 0 auto;
+    text-align: center !important;
+}
+.hero .content h1 {
+    font-size: 3.5rem;
+    font-weight: 800;
+}
+.hero .content .lead {
+    font-size: 1.3rem;
+    opacity: 0.9;
+}
+.hero .content .btn-success {
+    background: #28a745;
+    border: none;
+    padding: 14px 40px;
+    font-weight: 600;
+    border-radius: 50px;
+}
+.hero .content .btn-success:hover {
+    background: #218838;
+}
+.hero-slideshow {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+}
+.hero-slideshow .slide {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    transition: opacity 1s ease-in-out;
+    background-size: cover;
+    background-position: center;
+}
+.hero-slideshow .slide.active {
+    opacity: 1;
+}
+
+/* ================================================================
+   8. SECTION TITLES
+   ================================================================ */
+.text-primary-green {
+    color: #28a745 !important;
+}
+.text-success {
+    color: #28a745 !important;
+}
+.section-title {
+    font-size: 2.5rem;
+    font-weight: 700;
+    text-align: center;
+    margin-bottom: 1rem;
+}
+.section-subtitle {
+    text-align: center;
+    color: #888888;
+    max-width: 650px;
+    margin: -0.5rem auto 3rem;
+    font-size: 1.05rem;
+}
+
+/* ================================================================
+   9. QUICK ACTION CARDS (Homepage)
+   ================================================================ */
+.action-card {
+    background: #ffffff;
+    border: 1px solid #e0e0e0;
+    border-radius: 12px;
+    transition: all 0.3s ease;
+    height: 100%;
+    overflow: hidden;
+}
+.action-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+}
+.action-card img {
+    height: 180px;
+    object-fit: cover;
+    width: 100%;
+    border-radius: 12px 12px 0 0;
+}
+.action-card .btn {
+    border-radius: 50px;
+    padding: 10px;
+    font-weight: 600;
+    font-size: 0.9rem;
+    width: 100%;
+    border: 2px solid;
+    transition: all 0.3s ease;
+}
+.action-card .btn-outline-danger {
+    border-color: #dc3545;
+    color: #dc3545;
+}
+.action-card .btn-outline-danger:hover {
+    background: #dc3545;
+    color: white;
+}
+.action-card .btn-outline-primary {
+    border-color: #0d6efd;
+    color: #0d6efd;
+}
+.action-card .btn-outline-primary:hover {
+    background: #0d6efd;
+    color: white;
+}
+.action-card .btn-outline-warning {
+    border-color: #ffc107;
+    color: #ffc107;
+}
+.action-card .btn-outline-warning:hover {
+    background: #ffc107;
+    color: black;
+}
+.action-card .btn-outline-success {
+    border-color: #28a745;
+    color: #28a745;
+}
+.action-card .btn-outline-success:hover {
+    background: #28a745;
+    color: white;
+}
+
+/* ================================================================
+   10. SERVICES SLIDER (Homepage)
+   ================================================================ */
+#servicesCarousel .carousel-item .row {
+    align-items: center;
+    background: #ffffff;
+    border-radius: 16px;
+    padding: 30px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+}
+#servicesCarousel h4 {
+    font-weight: 700;
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+    color: #222222;
+}
+#servicesCarousel p {
+    color: #555555;
+}
+.service-img {
+    max-height: 350px;
+    width: auto;
+    border-radius: 16px;
+}
+#servicesCarousel .carousel-control-prev,
+#servicesCarousel .carousel-control-next {
+    width: 45px;
+    height: 45px;
+    background: rgba(40,167,69,0.1);
+    border-radius: 50%;
+    top: 50%;
+    transform: translateY(-50%);
+    border: 1px solid rgba(40,167,69,0.2);
+}
+#servicesCarousel .carousel-control-prev:hover,
+#servicesCarousel .carousel-control-next:hover {
+    background: #28a745;
+}
+#servicesCarousel .carousel-control-prev-icon,
+#servicesCarousel .carousel-control-next-icon {
+    filter: brightness(10);
+}
+
+/* ================================================================
+   11. MAP (Homepage)
+   ================================================================ */
+.map-container {
+    width: 100%;
+    height: 500px;
+    border-radius: 12px;
+    overflow: hidden;
+    border: 1px solid #e0e0e0;
+}
+.map-container iframe {
+    width: 100%;
+    height: 100%;
+    border: 0;
+}
+.map-description {
+    color: #666666 !important;
+}
+
+/* ================================================================
+   12. SCHEDULE PAGE SPECIFIC
+   ================================================================ */
+.schedule-card h3 {
+    color: #28a745;
+}
+.schedule-card h3 i {
+    margin-right: 10px;
+}
+
+/* ================================================================
+   13. CLEANER PAGE SPECIFIC
+   ================================================================ */
+.cleaner-card h3 {
+    color: #0d6efd;
+}
+.cleaner-card h3 i {
+    margin-right: 10px;
+}
+
+/* Gender Options */
+.gender-options {
+    display: flex;
+    gap: 20px;
+    padding-top: 8px;
+}
+.gender-options .form-check {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+.gender-options .form-check-input {
+    width: 18px;
+    height: 18px;
+    border: 2px solid #e0e0e0;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+.gender-options .form-check-input:checked {
+    background-color: #0d6efd;
+    border-color: #0d6efd;
+}
+.gender-options .form-check-label {
+    color: #444444;
+    font-weight: 500;
+    cursor: pointer;
+}
+
+/* ================================================================
+   14. PROFILE PAGE SPECIFIC
+   ================================================================ */
+.profile-card {
+    max-width: 600px;
+    margin: 40px auto;
+    padding: 0 20px;
+}
+.profile-pic {
+    width: 130px;
+    height: 130px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 4px solid #28a745;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+}
+.profile-pic-wrapper {
+    text-align: center;
+    margin-bottom: 20px;
+}
+.profile-pic-wrapper h3 {
+    margin-top: 10px;
+    color: #333333;
+}
+.profile-pic-wrapper p {
+    color: #888888;
+}
+
+/* ================================================================
+   15. MY SCHEDULE PAGE SPECIFIC
+   ================================================================ */
+.schedule-table-wrapper {
+    max-width: 950px;
+    margin: 40px auto;
+    padding: 0 20px;
+}
+.schedule-table-card {
+    background: #ffffff;
+    padding: 30px;
+    border-radius: 20px;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.08);
+}
+.schedule-table-card h3 {
+    color: #28a745;
+    font-weight: 700;
+}
+.schedule-table-card h3 i {
+    margin-right: 10px;
+}
+.schedule-table-card .table {
+    margin-bottom: 0;
+}
+.schedule-table-card .table thead {
+    background: #28a745;
+    color: white;
+    border-radius: 10px;
+}
+.schedule-table-card .table th {
+    padding: 12px 15px;
+    font-weight: 600;
+}
+.schedule-table-card .table td {
+    padding: 12px 15px;
+    vertical-align: middle;
+    color: #333333;
+}
+.schedule-table-card .table tbody tr:hover {
+    background: #f8f9fa;
+}
+.badge-pending {
+    background: #ffc107;
+    color: #000;
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-weight: 600;
+}
+.badge-completed {
+    background: #28a745;
+    color: #fff;
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-weight: 600;
+}
+.badge-cancelled {
+    background: #dc3545;
+    color: #fff;
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-weight: 600;
+}
+.badge-urgent {
+    background: #dc3545;
+    color: #fff;
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-weight: 600;
+}
+.badge-normal {
+    background: #6c757d;
+    color: #fff;
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-weight: 600;
+}
+
+/* ================================================================
+   16. ADMIN DASHBOARD SPECIFIC
+   ================================================================ */
+.admin-wrapper {
+    max-width: 1200px;
+    margin: 30px auto;
+    padding: 0 20px;
+}
+.admin-card {
+    background: #ffffff;
+    border-radius: 16px;
+    padding: 25px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+    transition: all 0.3s ease;
+}
+.admin-card:hover {
+    box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+}
+.admin-card h5 {
+    font-weight: 700;
+    color: #28a745;
+}
+.stat-box {
+    background: #f8f9fa;
+    padding: 20px;
+    border-radius: 12px;
+    text-align: center;
+    border-left: 4px solid #28a745;
+    transition: all 0.3s ease;
+}
+.stat-box:hover {
+    background: #ffffff;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+    transform: translateY(-3px);
+}
+.stat-box .number {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: #28a745;
+}
+.stat-box .label {
+    color: #888888;
+    font-weight: 500;
+}
+.admin-table thead {
+    background: #28a745;
+    color: white;
+}
+.admin-table th {
+    padding: 12px 15px;
+    font-weight: 600;
+}
+.admin-table td {
+    padding: 12px 15px;
+    vertical-align: middle;
+    color: #333333;
+}
+.admin-table tbody tr:hover {
+    background: #f8f9fa;
+}
+
+/* Sidebar for Admin */
+.admin-sidebar {
+    background: #1a1a2e;
+    min-height: 100vh;
+    padding: 20px 0;
+    border-radius: 16px;
+}
+.admin-sidebar .logo-text {
+    color: #28a745;
+    font-size: 1.5rem;
+    font-weight: 700;
+    text-align: center;
+    padding: 15px;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+}
+.admin-sidebar .sidebar-link {
+    color: #b0b0b0;
+    text-decoration: none;
+    padding: 12px 20px;
+    display: block;
+    border-radius: 8px;
+    margin: 5px 10px;
+    transition: all 0.3s ease;
+}
+.admin-sidebar .sidebar-link:hover {
+    background: rgba(40,167,69,0.15);
+    color: #28a745;
+}
+.admin-sidebar .sidebar-link.active {
+    background: #28a745;
+    color: white;
+}
+.admin-sidebar .sidebar-link i {
+    margin-right: 10px;
+}
+
+/* ================================================================
+   17. CHATBOT (Common for all pages)
+   ================================================================ */
+.chatbot-btn {
+    position: fixed;
+    bottom: 25px;
+    right: 25px;
+    background: #28a745;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 60px;
+    height: 60px;
+    font-size: 24px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    z-index: 1000;
+    transition: all 0.3s ease;
+}
+.chatbot-btn:hover {
+    transform: scale(1.1);
+    box-shadow: 0 4px 20px rgba(40,167,69,0.4);
+}
+.chatbot-window {
+    position: fixed;
+    bottom: 95px;
+    right: 25px;
+    width: 320px;
+    height: 420px;
+    background: #ffffff;
+    border: 1px solid #e0e0e0;
+    border-radius: 12px;
+    display: none;
+    flex-direction: column;
+    overflow: hidden;
+    z-index: 999;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.15);
+}
+.chatbot-window.show {
+    display: flex;
+}
+.chatbot-header {
+    background: #28a745;
+    color: white;
+    padding: 12px 16px;
+    font-weight: 700;
+}
+.chatbot-body {
+    flex: 1;
+    padding: 12px;
+    overflow-y: auto;
+    font-size: 0.9rem;
+    background: #f9f9f9;
+    color: #333333;
+}
+.chatbot-body strong {
+    color: #222222;
+}
+.chatbot-input {
+    display: flex;
+    border-top: 1px solid #e0e0e0;
+    background: #ffffff;
+}
+.chatbot-input input {
+    flex: 1;
+    border: none;
+    padding: 12px 16px;
+    font-size: 0.9rem;
+    outline: none;
+    background: transparent;
+    color: #333333;
+}
+.chatbot-input input::placeholder {
+    color: #999999;
+}
+.chatbot-input button {
+    border: none;
+    background: #28a745;
+    color: white;
+    padding: 12px 20px;
+    font-weight: 600;
+}
+.chatbot-input button:hover {
+    background: #218838;
+}
+
+/* ================================================================
+   18. FOOTER (Common for all pages)
+   ================================================================ */
+footer {
+    background: #1a1a2e;
+    padding: 40px 0 20px;
+    border-top: 1px solid rgba(255,255,255,0.1);
+    margin-top: 40px;
+}
+footer h5 {
+    color: #ffffff !important;
+}
+footer .social-icons a {
+    color: white;
+    margin: 0 10px;
+    font-size: 1.2rem;
+    transition: all 0.3s ease;
+}
+footer .social-icons a:hover {
+    color: #28a745;
+}
+footer a {
+    color: #b0b0b0;
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+footer a:hover {
+    color: #28a745;
+}
+footer .text-muted {
+    color: #b0b0b0 !important;
+}
+
+/* ================================================================
+   19. TOAST / POPUP NOTIFICATIONS
+   ================================================================ */
+.toast-container {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 9999;
+    min-width: 350px;
+    max-width: 450px;
+}
+.toast-custom {
+    background: #ffffff;
+    border-radius: 16px;
+    padding: 20px 25px;
+    box-shadow: 0 15px 50px rgba(0,0,0,0.2);
+    border-left: 6px solid #28a745;
+    animation: slideInRight 0.5s ease-out;
+    margin-bottom: 15px;
+    display: flex;
+    align-items: flex-start;
+    gap: 15px;
+}
+.toast-custom.error {
+    border-left-color: #dc3545;
+}
+.toast-custom .toast-icon {
+    font-size: 2rem;
+    flex-shrink: 0;
+    margin-top: 2px;
+}
+.toast-custom .toast-icon.success {
+    color: #28a745;
+}
+.toast-custom .toast-icon.error {
+    color: #dc3545;
+}
+.toast-custom .toast-content {
+    flex: 1;
+}
+.toast-custom .toast-title {
+    font-weight: 700;
+    font-size: 1.05rem;
+    color: #1a1a2e;
+    margin-bottom: 2px;
+}
+.toast-custom .toast-message {
+    color: #555555;
+    font-size: 0.9rem;
+}
+.toast-custom .toast-close {
+    background: none;
+    border: none;
+    font-size: 1.3rem;
+    color: #999;
+    cursor: pointer;
+    padding: 0 5px;
+    transition: all 0.3s ease;
+    flex-shrink: 0;
+}
+.toast-custom .toast-close:hover {
+    color: #333;
+    transform: rotate(90deg);
+}
+
+@keyframes slideInRight {
+    0% { opacity: 0; transform: translateX(100px); }
+    100% { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes slideOutRight {
+    0% { opacity: 1; transform: translateX(0); }
+    100% { opacity: 0; transform: translateX(100px); }
+}
+.toast-custom.hiding {
+    animation: slideOutRight 0.4s ease-in forwards;
+}
+
+/* ================================================================
+   20. RESPONSIVE STYLES
+   ================================================================ */
+@media (max-width: 992px) {
+    .hero .content h1 {
+        font-size: 2.8rem;
+    }
+    .stat-box .number {
+        font-size: 2rem;
+    }
+}
+
+@media (max-width: 768px) {
+    /* Hero */
+    .hero {
+        min-height: 380px;
+        margin: 10px 12px;
+        border-radius: 15px;
+    }
+    .hero .content h1 {
+        font-size: 2.2rem;
+    }
+    .hero .content .lead {
+        font-size: 1rem;
+    }
+
+    /* Navbar */
+    .navbar {
+        padding: 0.5rem 1rem;
+    }
+
+    /* Cards */
+    .form-card {
+        padding: 25px 20px;
+    }
+    .card-wrapper {
+        padding: 0 15px;
+        margin: 30px auto;
+    }
+
+    /* Services Slider */
+    #servicesCarousel .carousel-item .row {
+        text-align: center;
+        padding: 20px 15px;
+    }
+    #servicesCarousel .carousel-item .col-md-6:first-child {
+        order: 2;
+    }
+    #servicesCarousel .carousel-item .col-md-6:last-child {
+        order: 1;
+    }
+    .service-img {
+        max-height: 220px;
+        margin-bottom: 15px;
+    }
+
+    /* Map */
+    .map-container {
+        height: 300px;
+    }
+
+    /* Chatbot */
+    .chatbot-window {
+        width: 290px;
+        height: 380px;
+        right: 10px;
+        bottom: 85px;
+    }
+
+    /* Admin */
+    .admin-sidebar {
+        min-height: auto;
+        margin-bottom: 20px;
+    }
+    .stat-box .number {
+        font-size: 1.8rem;
+    }
+}
+
+@media (max-width: 576px) {
+    .hero .content h1 {
+        font-size: 1.8rem;
+    }
+    .hero .content .btn-success {
+        padding: 12px 30px;
+        font-size: 0.9rem;
+    }
+    .action-card img {
+        height: 140px;
+    }
+    .form-card h3 {
+        font-size: 1.4rem;
+    }
+    .form-control,
+    .form-select {
+        padding: 10px 14px;
+        font-size: 0.9rem;
+    }
+    .btn-success,
+    .btn-primary {
+        padding: 12px;
+        font-size: 0.95rem;
+    }
+    .stat-box .number {
+        font-size: 1.5rem;
+    }
+    .schedule-table-card {
+        padding: 15px;
+    }
+    .schedule-table-card .table {
+        font-size: 0.85rem;
+    }
+    .schedule-table-card .table th,
+    .schedule-table-card .table td {
+        padding: 8px 10px;
+    }
+}

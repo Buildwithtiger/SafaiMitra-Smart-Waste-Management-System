@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Request Cleaner - SafaiMitra</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+
+    <!-- AOS Animation -->
+    <link href="https://unpkg.com/aos@next/dist/aos.css" rel="stylesheet" />
+
+    <!-- ✅ EXTERNAL CSS -->
+    <link th:href="@{/css/style.css}" rel="stylesheet">
+
+</head>
+<body>
+
+<!-- ============================================================ -->
+<!-- NAVBAR -->
+<!-- ============================================================ -->
+<div th:replace="~{fragments/navbar :: navbar}"></div>
+
+<!-- ============================================================ -->
+<!-- TOAST / POPUP CONTAINER -->
+<!-- ============================================================ -->
+<div class="toast-container" id="toastContainer">
+    <!-- Success Toast -->
+    <div th:if="${success}" class="toast-custom" id="successToast">
+        <div class="toast-icon success">
+            <i class="fas fa-check-circle"></i>
+        </div>
+        <div class="toast-content">
+            <div class="toast-title">✅ Success!</div>
+            <div class="toast-message" th:text="${success}">Cleaner requested successfully!</div>
+        </div>
+        <button class="toast-close" onclick="closeToast(this)">&times;</button>
+    </div>
+
+    <!-- Error Toast -->
+    <div th:if="${error}" class="toast-custom error" id="errorToast">
+        <div class="toast-icon error">
+            <i class="fas fa-exclamation-circle"></i>
+        </div>
+        <div class="toast-content">
+            <div class="toast-title">❌ Oops!</div>
+            <div class="toast-message" th:text="${error}">Something went wrong!</div>
+        </div>
+        <button class="toast-close" onclick="closeToast(this)">&times;</button>
+    </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- REQUEST CLEANER FORM -->
+<!-- ============================================================ -->
+<div class="card-wrapper">
+    <div class="form-card cleaner-card shadow" data-aos="fade-up" data-aos-duration="800">
+        <h3 class="text-center"><i class="fas fa-broom"></i> Request a Cleaner</h3>
+        <p class="subtitle">Get professional cleaning services at your doorstep</p>
+        <hr>
+
+        <!-- Form -->
+        <form th:action="@{/cleaner/request}" th:object="${booking}" method="post" id="cleanerForm">
+
+            <!-- Service Type -->
+            <div class="mb-3">
+                <label class="form-label"><i class="fas fa-broom me-1"></i> Service Type <span class="required">*</span></label>
+                <select class="form-select" th:field="*{serviceType}" required>
+                    <option value="">Select Service</option>
+                    <option value="HOME_CLEANING">🏠 Home Cleaning</option>
+                    <option value="DRAIN_CLEANING">🚽 Drain Cleaning</option>
+                    <option value="EVENT_CLEANING">🎉 Event Cleaning</option>
+                    <option value="OFFICE_CLEANING">🏢 Office Cleaning</option>
+                </select>
+            </div>
+
+            <!-- Address -->
+            <div class="mb-3">
+                <label class="form-label"><i class="fas fa-map-marker-alt me-1"></i> Address <span class="required">*</span></label>
+                <input type="text" class="form-control" th:field="*{address}" placeholder="Enter your full address" required>
+            </div>
+
+            <!-- Date & Time -->
+            <div class="row g-3">
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        <label class="form-label"><i class="fas fa-calendar-day me-1"></i> Preferred Date <span class="required">*</span></label>
+                        <input type="date" class="form-control" th:field="*{preferredDate}" required>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        <label class="form-label"><i class="fas fa-clock me-1"></i> Preferred Time <span class="required">*</span></label>
+                        <input type="time" class="form-control" th:field="*{preferredTime}" required>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Priority -->
+            <div class="mb-3">
+                <label class="form-label"><i class="fas fa-flag me-1"></i> Priority <span class="required">*</span></label>
+                <select class="form-select" th:field="*{priority}" required>
+                    <option value="NORMAL">🟢 Normal</option>
+                    <option value="URGENT">🔴 Urgent</option>
+                </select>
+            </div>
+
+            <!-- Gender Option -->
+            <div class="mb-3">
+                <label class="form-label"><i class="fas fa-venus-mars me-1"></i> Cleaner Gender Preference</label>
+                <select class="form-select" th:field="*{gender}">
+                    <option value="">Select Gender</option>
+                    <option value="Male">👨 Male</option>
+                    <option value="Female">👩 Female</option>
+                    <option value="Any">👤 Any</option>
+                </select>
+            </div>
+
+            <!-- Instructions -->
+            <div class="mb-4">
+                <label class="form-label"><i class="fas fa-pen me-1"></i> Special Instructions</label>
+                <textarea class="form-control" th:field="*{instructions}" rows="3" placeholder="Any special instructions for the cleaner..."></textarea>
+            </div>
+
+            <!-- Required Field Note -->
+            <p class="text-muted small mb-3"><i class="fas fa-info-circle me-1"></i> Fields with <span class="required">*</span> are required</p>
+
+            <!-- Submit Button -->
+            <button type="submit" class="btn btn-primary w-100" id="submitBtn">
+                <i class="fas fa-paper-plane"></i> Request Cleaner
+            </button>
+        </form>
+    </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- FOOTER -->
+<!-- ============================================================ -->
+<div th:replace="~{fragments/footer :: footer}"></div>
+
+<!-- ============================================================ -->
+<!-- SCRIPTS -->
+<!-- ============================================================ -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+
+<script>
+    // ===== AOS INIT =====
+    AOS.init({ duration: 1000 });
+
+    // ===== CLOSE TOAST =====
+    function closeToast(button) {
+        const toast = button.closest('.toast-custom');
+        if (toast) {
+            toast.classList.add('hiding');
+            setTimeout(() => {
+                if (toast.parentNode) {
+                    toast.remove();
+                }
+            }, 400);
+        }
+    }
+
+    // ===== SHOW TOAST AND REDIRECT TO HOME =====
+    function showToastAndRedirect(message, type) {
+        // Remove existing toasts
+        const existingToasts = document.querySelectorAll('.toast-custom');
+        existingToasts.forEach(t => t.remove());
+
+        // Create toast container if not exists
+        let container = document.getElementById('toastContainer');
+        if (!container) {
+            container = document.createElement('div');
+            container.id = 'toastContainer';
+            container.className = 'toast-container';
+            document.body.appendChild(container);
+        }
+
+        // Create toast
+        const toast = document.createElement('div');
+        toast.className = 'toast-custom';
+        if (type === 'error') {
+            toast.classList.add('error');
+        }
+        toast.innerHTML = `
+            <div class="toast-icon ${type === 'error' ? 'error' : 'success'}">
+                <i class="fas ${type === 'error' ? 'fa-exclamation-circle' : 'fa-check-circle'}"></i>
+            </div>
+            <div class="toast-content">
+                <div class="toast-title">${type === 'error' ? '❌ Oops!' : '✅ Success!'}</div>
+                <div class="toast-message">${message}</div>
+            </div>
+            <button class="toast-close" onclick="closeToast(this)">&times;</button>
+        `;
+        container.appendChild(toast);
+
+        // Auto close after 3 seconds and redirect
+        setTimeout(() => {
+            toast.classList.add('hiding');
+            setTimeout(() => {
+                toast.remove();
+                // Redirect to home page
+                window.location.href = '/';
+            }, 400);
+        }, 3000);
+    }
+
+    // ===== FORM SUBMIT - Show Toast & Redirect =====
+    document.getElementById('cleanerForm')?.addEventListener('submit', function(e) {
+        e.preventDefault(); // Prevent default form submission
+
+        const btn = document.getElementById('submitBtn');
+        btn.disabled = true;
+        btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Submitting...';
+
+        // Get form data
+        const formData = new FormData(this);
+
+        // Submit form using fetch
+        fetch(this.action, {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => response.text())
+        .then(html => {
+            // Check if success message is in response
+            if (html.includes('success')) {
+                showToastAndRedirect('✅ Cleaner requested successfully! We will contact you shortly.', 'success');
+            } else {
+                showToastAndRedirect('❌ Something went wrong! Please try again.', 'error');
+                btn.disabled = false;
+                btn.innerHTML = '<i class="fas fa-paper-plane"></i> Request Cleaner';
+            }
+        })
+        .catch(error => {
+            showToastAndRedirect('❌ Network error! Please try again.', 'error');
+            btn.disabled = false;
+            btn.innerHTML = '<i class="fas fa-paper-plane"></i> Request Cleaner';
+        });
+    });
+</script>
+
+</body>
+</html>
