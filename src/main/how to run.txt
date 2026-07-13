@@ -1,0 +1,5 @@
+http://localhost:8080/register-admin   use for admin register if not work go to login.html and there is    <p class="text-center mt-2" style="font-size: 0.85rem;">
+                                                                                                         <!--      <a href="/register-admin" style="color: #dc3545; font-weight: 600;">-->
+                                                                                                         <!--        <i class="fas fa-user-shield"></i> Register as Admin-->
+                                                                                                         <!--      </a>-->
+                                                                                                             </p>   in this section u can make admin registration just remove the tag <!-- -->

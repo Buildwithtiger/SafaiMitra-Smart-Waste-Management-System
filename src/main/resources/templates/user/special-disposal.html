@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Special Disposal - SafaiMitra</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+
+    <!-- AOS Animation -->
+    <link href="https://unpkg.com/aos@next/dist/aos.css" rel="stylesheet" />
+
+    <!-- External CSS -->
+    <link th:href="@{/css/style.css}" rel="stylesheet">
+
+    <style>
+        .waste-type-card {
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 15px 20px;
+            border-left: 4px solid #ff6d00;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        .waste-type-card:hover {
+            background: #ffffff;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+            transform: translateX(5px);
+        }
+        .waste-type-card input[type="radio"] {
+            accent-color: #ff6d00;
+            width: 18px;
+            height: 18px;
+            margin-right: 10px;
+        }
+        .waste-type-card label {
+            color: #333333;
+            font-weight: 500;
+            cursor: pointer;
+        }
+        .waste-type-card small {
+            color: #888888;
+            font-size: 0.75rem;
+            display: block;
+            margin-left: 30px;
+        }
+    </style>
+</head>
+<body>
+
+<!-- ============================================================ -->
+<!-- NAVBAR -->
+<!-- ============================================================ -->
+<div th:replace="~{fragments/navbar :: navbar}"></div>
+
+<!-- ============================================================ -->
+<!-- TOAST / POPUP CONTAINER -->
+<!-- ============================================================ -->
+<div class="toast-container" id="toastContainer">
+    <!-- Success Toast -->
+    <div th:if="${success}" class="toast-custom" id="successToast">
+        <div class="toast-icon success">
+            <i class="fas fa-check-circle"></i>
+        </div>
+        <div class="toast-content">
+            <div class="toast-title">✅ Success!</div>
+            <div class="toast-message" th:text="${success}">Special disposal request submitted successfully!</div>
+        </div>
+        <button class="toast-close" onclick="closeToast(this)">&times;</button>
+    </div>
+
+    <!-- Error Toast -->
+    <div th:if="${error}" class="toast-custom error" id="errorToast">
+        <div class="toast-icon error">
+            <i class="fas fa-exclamation-circle"></i>
+        </div>
+        <div class="toast-content">
+            <div class="toast-title">❌ Oops!</div>
+            <div class="toast-message" th:text="${error}">Something went wrong!</div>
+        </div>
+        <button class="toast-close" onclick="closeToast(this)">&times;</button>
+    </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- SPECIAL DISPOSAL FORM -->
+<!-- ============================================================ -->
+<div class="card-wrapper">
+    <div class="form-card shadow" data-aos="fade-up" data-aos-duration="800">
+        <h3 class="text-center" style="color: #ff6d00;">
+            <i class="fas fa-biohazard"></i> Special Disposal
+        </h3>
+        <p class="subtitle">Safe disposal of hazardous, electronic, medical, and other waste</p>
+        <hr>
+
+        <form th:action="@{/disposal/special}" method="post" id="disposalForm">
+
+            <!-- Waste Type -->
+            <div class="mb-3">
+                <label class="form-label"><i class="fas fa-trash me-1"></i> Waste Type <span class="required">*</span></label>
+                <div class="row g-2">
+                    <div class="col-md-4 col-sm-6">
+                        <div class="waste-type-card">
+                            <input type="radio" name="wasteType" value="E-WASTE" id="ewaste" required>
+                            <label for="ewaste">💻 E-Waste</label>
+                        </div>
+                    </div>
+                    <div class="col-md-4 col-sm-6">
+                        <div class="waste-type-card">
+                            <input type="radio" name="wasteType" value="MEDICAL" id="medical">
+                            <label for="medical">🏥 Medical Waste</label>
+                        </div>
+                    </div>
+                    <div class="col-md-4 col-sm-6">
+                        <div class="waste-type-card">
+                            <input type="radio" name="wasteType" value="CHEMICAL" id="chemical">
+                            <label for="chemical">🧪 Chemical Waste</label>
+                        </div>
+                    </div>
+                    <div class="col-md-4 col-sm-6">
+                        <div class="waste-type-card">
+                            <input type="radio" name="wasteType" value="RECYCLE" id="recycle">
+                            <label for="recycle">♻️ Recycle Waste</label>
+                        </div>
+                    </div>
+                    <div class="col-md-4 col-sm-6">
+                        <div class="waste-type-card">
+                            <input type="radio" name="wasteType" value="CONSTRUCTION" id="construction">
+                            <label for="construction">🏗️ Construction Waste</label>
+                        </div>
+                    </div>
+                    <div class="col-md-4 col-sm-6">
+                        <div class="waste-type-card">
+                            <input type="radio" name="wasteType" value="ORGANIC" id="organic">
+                            <label for="organic">🌿 Organic Waste</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Description -->
+            <div class="mb-3">
+                <label class="form-label"><i class="fas fa-align-left me-1"></i> Description <span class="required">*</span></label>
+                <textarea class="form-control" name="description" rows="3" placeholder="Describe the waste items in detail..." required></textarea>
+            </div>
+
+            <!-- Quantity -->
+            <div class="mb-3">
+                <label class="form-label"><i class="fas fa-weight-hanging me-1"></i> Approximate Quantity</label>
+                <select class="form-select" name="quantity">
+                    <option value="Small">📦 Small (Less than 5kg)</option>
+                    <option value="Medium">📦 Medium (5kg - 20kg)</option>
+                    <option value="Large">📦 Large (More than 20kg)</option>
+                    <option value="Very Large">📦 Very Large (More than 50kg)</option>
+                </select>
+            </div>
+
+            <!-- Pickup Address -->
+            <div class="mb-3">
+                <label class="form-label"><i class="fas fa-map-marker-alt me-1"></i> Pickup Address <span class="required">*</span></label>
+                <input type="text" class="form-control" name="address" placeholder="Enter pickup address" required>
+            </div>
+
+            <!-- Date & Time -->
+            <div class="row g-3">
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        <label class="form-label"><i class="fas fa-calendar-day me-1"></i> Preferred Date <span class="required">*</span></label>
+                        <input type="date" class="form-control" name="preferredDate" required>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        <label class="form-label"><i class="fas fa-clock me-1"></i> Preferred Time <span class="required">*</span></label>
+                        <input type="time" class="form-control" name="preferredTime" required>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Required Field Note -->
+            <p class="text-muted small mb-3"><i class="fas fa-info-circle me-1"></i> Fields with <span class="required">*</span> are required</p>
+
+            <!-- Submit Button -->
+            <button type="submit" class="btn w-100" id="submitBtn" style="background: #ff6d00; color: white; font-weight: 700; padding: 14px; border-radius: 12px; transition: all 0.3s ease;">
+                <i class="fas fa-paper-plane"></i> Submit Disposal Request
+            </button>
+        </form>
+    </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- FOOTER -->
+<!-- ============================================================ -->
+<div th:replace="~{fragments/footer :: footer}"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+<script>
+    // ===== AOS INIT =====
+    AOS.init({ duration: 1000 });
+
+    // ===== CLOSE TOAST =====
+    function closeToast(button) {
+        const toast = button.closest('.toast-custom');
+        if (toast) {
+            toast.classList.add('hiding');
+            setTimeout(() => {
+                if (toast.parentNode) {
+                    toast.remove();
+                }
+            }, 400);
+        }
+    }
+
+    // ===== SHOW TOAST AND REDIRECT TO HOME =====
+    function showToastAndRedirect(message, type) {
+        // Remove existing toasts
+        const existingToasts = document.querySelectorAll('.toast-custom');
+        existingToasts.forEach(t => t.remove());
+
+        // Create toast container if not exists
+        let container = document.getElementById('toastContainer');
+        if (!container) {
+            container = document.createElement('div');
+            container.id = 'toastContainer';
+            container.className = 'toast-container';
+            document.body.appendChild(container);
+        }
+
+        // Create toast
+        const toast = document.createElement('div');
+        toast.className = 'toast-custom';
+        if (type === 'error') {
+            toast.classList.add('error');
+        }
+        toast.innerHTML = `
+            <div class="toast-icon ${type === 'error' ? 'error' : 'success'}">
+                <i class="fas ${type === 'error' ? 'fa-exclamation-circle' : 'fa-check-circle'}"></i>
+            </div>
+            <div class="toast-content">
+                <div class="toast-title">${type === 'error' ? '❌ Oops!' : '✅ Success!'}</div>
+                <div class="toast-message">${message}</div>
+            </div>
+            <button class="toast-close" onclick="closeToast(this)">&times;</button>
+        `;
+        container.appendChild(toast);
+
+        // Auto close after 3 seconds and redirect
+        setTimeout(() => {
+            toast.classList.add('hiding');
+            setTimeout(() => {
+                toast.remove();
+                // Redirect to home page
+                window.location.href = '/';
+            }, 400);
+        }, 3000);
+    }
+
+    // ===== FORM SUBMIT - Show Toast & Redirect =====
+    document.getElementById('disposalForm')?.addEventListener('submit', function(e) {
+        e.preventDefault(); // Prevent default form submission
+
+        const btn = document.getElementById('submitBtn');
+        btn.disabled = true;
+        btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Submitting...';
+
+        // Get form data
+        const formData = new FormData(this);
+
+        // Submit form using fetch
+        fetch(this.action, {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => response.text())
+        .then(html => {
+            // Check if success message is in response
+            if (html.includes('success')) {
+                showToastAndRedirect('✅ Special disposal request submitted successfully!', 'success');
+            } else {
+                showToastAndRedirect('❌ Something went wrong! Please try again.', 'error');
+                btn.disabled = false;
+                btn.innerHTML = '<i class="fas fa-paper-plane"></i> Submit Disposal Request';
+            }
+        })
+        .catch(error => {
+            showToastAndRedirect('❌ Network error! Please try again.', 'error');
+            btn.disabled = false;
+            btn.innerHTML = '<i class="fas fa-paper-plane"></i> Submit Disposal Request';
+        });
+    });
+</script>
+
+</body>
+</html>

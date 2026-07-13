@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Edit Booking - SafaiMitra</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+
+    <!-- AOS Animation -->
+    <link href="https://unpkg.com/aos@next/dist/aos.css" rel="stylesheet" />
+
+    <!-- ✅ EXTERNAL CSS -->
+    <link th:href="@{/css/style.css}" rel="stylesheet">
+
+    <style>
+        .readonly-field {
+            background: #f0f0f0 !important;
+            color: #666 !important;
+            cursor: not-allowed;
+            border-color: #e0e0e0 !important;
+        }
+        .edit-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        .edit-header h3 {
+            font-weight: 700;
+            color: #28a745;
+        }
+        .edit-header .badge {
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-weight: 600;
+        }
+        .badge-pending { background: #ffc107; color: #000; }
+        .badge-completed { background: #28a745; color: #fff; }
+        .badge-cancelled { background: #dc3545; color: #fff; }
+
+        @media (max-width: 768px) {
+            .edit-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<!-- ============================================================ -->
+<!-- NAVBAR -->
+<!-- ============================================================ -->
+<div th:replace="~{fragments/navbar :: navbar}"></div>
+
+<!-- ============================================================ -->
+<!-- EDIT BOOKING FORM -->
+<!-- ============================================================ -->
+<div class="card-wrapper">
+    <div class="form-card shadow" data-aos="fade-up" data-aos-duration="800">
+
+        <!-- Header -->
+        <div class="edit-header">
+            <h3><i class="fas fa-edit text-success"></i> Edit Booking</h3>
+            <span th:if="${booking.status == 'PENDING'}" class="badge badge-pending">⏳ Pending</span>
+            <span th:if="${booking.status == 'COMPLETED'}" class="badge badge-completed">✅ Completed</span>
+            <span th:if="${booking.status == 'CANCELLED'}" class="badge badge-cancelled">❌ Cancelled</span>
+        </div>
+        <p class="text-muted">Update your booking details</p>
+        <hr>
+
+        <!-- Success/Error Messages -->
+        <div th:if="${success}" class="alert alert-success" th:text="${success}"></div>
+        <div th:if="${error}" class="alert alert-danger" th:text="${error}"></div>
+
+        <!-- ⚠️ Warning for non-pending bookings -->
+        <div th:if="${booking.status != 'PENDING'}" class="alert alert-warning text-center">
+            <i class="fas fa-info-circle me-2"></i>
+            This booking is <strong th:text="${booking.status}"></strong> and cannot be edited.
+            <br>
+            <a href="/my-schedule" class="btn btn-sm btn-secondary mt-2">
+                <i class="fas fa-arrow-left"></i> Back
+            </a>
+        </div>
+
+        <!-- ===== EDIT FORM ===== -->
+        <form th:if="${booking.status == 'PENDING'}"
+              th:action="@{/booking/edit/{id}(id=${booking.id})}"
+              method="post">
+
+            <!-- Service Info (Read Only - 1 Line) -->
+            <div class="row g-2 mb-3">
+                <div class="col-md-4">
+                    <label class="form-label">Service</label>
+                    <input type="text" class="form-control readonly-field" th:value="${booking.serviceType}" readonly>
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label">Date</label>
+                    <input type="text" class="form-control readonly-field" th:value="${booking.preferredDate}" readonly>
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label">Time</label>
+                    <input type="text" class="form-control readonly-field" th:value="${booking.preferredTime}" readonly>
+                </div>
+            </div>
+
+            <!-- Address (Editable) -->
+            <div class="mb-3">
+                <label class="form-label"><i class="fas fa-map-marker-alt text-success me-1"></i> Address <span class="required">*</span></label>
+                <input type="text" class="form-control" th:value="${booking.address}" name="address" required>
+            </div>
+
+            <!-- Phone (Editable) -->
+            <div class="mb-3">
+                <label class="form-label"><i class="fas fa-phone text-success me-1"></i> Phone</label>
+                <input type="tel" class="form-control" th:value="${booking.phone}" name="phone">
+            </div>
+
+            <!-- Instructions (Editable) -->
+            <div class="mb-3">
+                <label class="form-label"><i class="fas fa-pen text-success me-1"></i> Instructions</label>
+                <textarea class="form-control" name="instructions" rows="2" th:text="${booking.instructions}" placeholder="Any special instructions..."></textarea>
+            </div>
+
+            <!-- ===== EMERGENCY TYPE (Only if Emergency) ===== -->
+            <div th:if="${booking.serviceType == 'EMERGENCY'}" class="mb-3">
+                <label class="form-label"><i class="fas fa-triangle-exclamation text-danger me-1"></i> Emergency Type</label>
+                <select class="form-select" name="emergencyType">
+                    <option th:selected="${booking.emergencyType == 'AMBULANCE'}" value="AMBULANCE">🚑 Ambulance</option>
+                    <option th:selected="${booking.emergencyType == 'FIRE_BRIGADE'}" value="FIRE_BRIGADE">🔥 Fire</option>
+                    <option th:selected="${booking.emergencyType == 'BIOHAZARD'}" value="BIOHAZARD">🧬 Biohazard</option>
+                    <option th:selected="${booking.emergencyType == 'CHEMICAL'}" value="CHEMICAL">🧪 Chemical</option>
+                    <option th:selected="${booking.emergencyType == 'BLOCKAGE'}" value="BLOCKAGE">🚽 Blockage</option>
+                    <option th:selected="${booking.emergencyType == 'OVERFLOW'}" value="OVERFLOW">🗑️ Overflow</option>
+                </select>
+            </div>
+
+            <!-- ===== WASTE TYPE (Only if Special Disposal) ===== -->
+            <div th:if="${booking.serviceType == 'SPECIAL_DISPOSAL'}" class="mb-3">
+                <label class="form-label"><i class="fas fa-recycle text-warning me-1"></i> Waste Type</label>
+                <select class="form-select" name="wasteType">
+                    <option th:selected="${booking.wasteType == 'E-WASTE'}" value="E-WASTE">💻 E-Waste</option>
+                    <option th:selected="${booking.wasteType == 'MEDICAL'}" value="MEDICAL">🏥 Medical</option>
+                    <option th:selected="${booking.wasteType == 'CHEMICAL'}" value="CHEMICAL">🧪 Chemical</option>
+                    <option th:selected="${booking.wasteType == 'RECYCLE'}" value="RECYCLE">♻️ Recycle</option>
+                    <option th:selected="${booking.wasteType == 'CONSTRUCTION'}" value="CONSTRUCTION">🏗️ Construction</option>
+                    <option th:selected="${booking.wasteType == 'ORGANIC'}" value="ORGANIC">🌿 Organic</option>
+                </select>
+            </div>
+
+            <!-- ===== CLEANER GENDER (Only if Cleaner Service) ===== -->
+            <div th:if="${booking.serviceType == 'CLEANER_SERVICE'}" class="mb-3">
+                <label class="form-label"><i class="fas fa-user text-primary me-1"></i> Cleaner Gender</label>
+                <select class="form-select" name="gender">
+                    <option th:selected="${booking.gender == null}" value="">👤 Any</option>
+                    <option th:selected="${booking.gender == 'Male'}" value="Male">👨 Male</option>
+                    <option th:selected="${booking.gender == 'Female'}" value="Female">👩 Female</option>
+                </select>
+            </div>
+
+            <!-- Submit Buttons -->
+            <div class="d-flex gap-2 mt-3">
+                <button type="submit" class="btn btn-success flex-grow-1">
+                    <i class="fas fa-save"></i> Update
+                </button>
+                <a href="/my-schedule" class="btn btn-secondary">
+                    <i class="fas fa-times"></i> Cancel
+                </a>
+            </div>
+
+        </form>
+
+    </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- FOOTER -->
+<!-- ============================================================ -->
+<div th:replace="~{fragments/footer :: footer}"></div>
+
+<!-- ============================================================ -->
+<!-- SCRIPTS -->
+<!-- ============================================================ -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+<script>
+    AOS.init({ duration: 1000 });
+</script>
+
+</body>
+</html>

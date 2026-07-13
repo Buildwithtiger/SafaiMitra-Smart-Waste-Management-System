@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Manage Users - SafaiMitra</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+
+    <!-- AOS Animation -->
+    <link href="https://unpkg.com/aos@next/dist/aos.css" rel="stylesheet" />
+
+    <!-- External CSS -->
+    <link th:href="@{/css/admin.css}" rel="stylesheet">
+
+</head>
+<body>
+
+<!-- ============================================================ -->
+<!-- ADMIN NAVBAR -->
+<!-- ============================================================ -->
+<nav class="navbar admin-navbar navbar-expand-lg">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="/admin/dashboard">
+            <i class="fas fa-recycle"></i> SafaiMitra - Admin
+        </a>
+        <div>
+            <a href="/" class="btn btn-sm btn-outline-success"><i class="fas fa-home"></i> Home</a>
+            <a href="/logout" class="btn btn-sm btn-outline-danger"><i class="fas fa-sign-out-alt"></i> Logout</a>
+        </div>
+    </div>
+</nav>
+
+<!-- ============================================================ -->
+<!-- ADMIN CONTENT -->
+<!-- ============================================================ -->
+<div class="admin-wrapper">
+    <div class="admin-container">
+
+        <!-- ===== SIDEBAR ===== -->
+        <aside class="admin-sidebar" data-aos="fade-right">
+            <div class="sidebar-brand">
+                <i class="fas fa-recycle"></i> SafaiMitra
+            </div>
+            <nav>
+                <a href="/admin/dashboard" class="sidebar-link">
+                    <i class="fas fa-tachometer-alt"></i> Dashboard
+                </a>
+                <a href="/admin/users" class="sidebar-link active">
+                    <i class="fas fa-users"></i> Users
+                </a>
+
+                <a href="/" class="sidebar-link">
+                    <i class="fas fa-home"></i> Home
+                </a>
+                <a href="/logout" class="sidebar-link text-danger">
+                    <i class="fas fa-sign-out-alt"></i> Logout
+                </a>
+            </nav>
+        </aside>
+
+        <!-- ===== MAIN CONTENT ===== -->
+        <main class="admin-content" data-aos="fade-up">
+
+            <!-- Header -->
+            <div class="content-header">
+                <h2><i class="fas fa-users"></i> Manage Users</h2>
+                <div class="search-box">
+                    <i class="fas fa-search search-icon"></i>
+                    <input type="text" id="searchInput" placeholder="Search users..." oninput="filterUsers()">
+                    <button class="clear-btn" id="clearBtn" onclick="clearSearch()"><i class="fas fa-times"></i></button>
+                </div>
+            </div>
+            <hr>
+
+            <!-- Stats -->
+            <div class="stats-row">
+                <div class="stat-box">
+                    <div class="stat-icon"><i class="fas fa-users"></i></div>
+                    <div class="number" th:text="${totalUsers}">0</div>
+                    <div class="label">Total Users</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-icon"><i class="fas fa-user-tie"></i></div>
+                    <div class="number" th:text="${totalAdmins}">0</div>
+                    <div class="label">Admins</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-icon"><i class="fas fa-user"></i></div>
+                    <div class="number" th:text="${totalNormalUsers}">0</div>
+                    <div class="label">Normal Users</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-icon"><i class="fas fa-user-check"></i></div>
+                    <div class="number" th:text="${activeUsers}">0</div>
+                    <div class="label">Active Users</div>
+                </div>
+            </div>
+
+            <!-- User List -->
+            <div id="userList">
+                <div th:each="user : ${users}">
+                    <div class="user-card" data-search="${user.fullName} ${user.email} ${user.role} ${user.phone}">
+                        <div class="user-info">
+                            <div>
+                                <div class="label">Name</div>
+                                <div class="value" th:text="${user.fullName}">John Doe</div>
+                            </div>
+                            <div>
+                                <div class="label">Email</div>
+                                <div class="value" th:text="${user.email}">john@example.com</div>
+                            </div>
+                            <div>
+                                <div class="label">Phone</div>
+                                <div class="value" th:text="${user.phone != null ? user.phone : 'N/A'}">N/A</div>
+                            </div>
+                            <div>
+                                <div class="label">Role</div>
+                                <div class="value">
+                                    <span th:if="${user.role == 'ADMIN'}" class="role-badge admin">👑 Admin</span>
+                                    <span th:unless="${user.role == 'ADMIN'}" class="role-badge user">👤 User</span>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="label">Status</div>
+                                <div class="value">
+                                    <span th:if="${user.active}" class="status-badge active">🟢 Active</span>
+                                    <span th:unless="${user.active}" class="status-badge inactive">🔴 Inactive</span>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="label">Joined</div>
+                                <div class="value" th:text="${user.createdAt != null ? user.createdAt.toLocalDate() : 'N/A'}">2025-01-01</div>
+                            </div>
+                        </div>
+                        <div class="user-actions">
+                            <button class="btn-action btn-view" th:onclick="'viewUser(' + ${user.id} + ')'">
+                                <i class="fas fa-eye"></i> View
+                            </button>
+                            <a th:if="${user.role != 'ADMIN'}" th:href="@{/admin/user/delete/{id}(id=${user.id})}" class="btn-action btn-delete" onclick="return confirm('Delete this user?')">
+                                <i class="fas fa-trash"></i> Delete
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div th:if="${#lists.isEmpty(users)}" class="empty-state">
+                    <i class="fas fa-users"></i>
+                    <h5>No Users Found</h5>
+                    <p>There are no users registered yet.</p>
+                </div>
+            </div>
+
+        </main>
+
+    </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- VIEW USER MODAL -->
+<!-- ============================================================ -->
+<div class="modal fade" id="viewUserModal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title"><i class="fas fa-user-circle"></i> User Details</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body" id="userModalBody">
+                <!-- Dynamic content will be loaded here -->
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- SCRIPTS -->
+<!-- ============================================================ -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+
+<script>
+    AOS.init({ duration: 800 });
+
+    // ===== SEARCH =====
+    function filterUsers() {
+        const input = document.getElementById('searchInput');
+        const filter = input.value.toLowerCase().trim();
+        const cards = document.querySelectorAll('.user-card');
+        const clearBtn = document.getElementById('clearBtn');
+
+        if (filter.length > 0) {
+            clearBtn.style.display = 'block';
+        } else {
+            clearBtn.style.display = 'none';
+        }
+
+        cards.forEach(card => {
+            const text = card.dataset.search ? card.dataset.search.toLowerCase() : card.textContent.toLowerCase();
+            if (text.includes(filter)) {
+                card.style.display = 'flex';
+            } else {
+                card.style.display = 'none';
+            }
+        });
+    }
+
+    function clearSearch() {
+        document.getElementById('searchInput').value = '';
+        document.getElementById('clearBtn').style.display = 'none';
+        filterUsers();
+    }
+
+    // ===== VIEW USER =====
+    function viewUser(userId) {
+        // AJAX call to get user details
+        fetch('/admin/user/' + userId)
+            .then(response => response.json())
+            .then(user => {
+                const modalBody = document.getElementById('userModalBody');
+                modalBody.innerHTML = `
+                    <div class="text-center">
+                        <div class="profile-avatar">${user.fullName.charAt(0)}</div>
+                        <h5 class="fw-bold">${user.fullName}</h5>
+                        <p class="text-muted">${user.role} • ${user.active ? '🟢 Active' : '🔴 Inactive'}</p>
+                    </div>
+                    <hr>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="profile-label">Email</div>
+                            <div class="profile-value">${user.email}</div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="profile-label">Phone</div>
+                            <div class="profile-value">${user.phone || 'N/A'}</div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="profile-label">Address</div>
+                            <div class="profile-value">${user.address || 'N/A'}</div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="profile-label">Joined</div>
+                            <div class="profile-value">${user.createdAt || 'N/A'}</div>
+                        </div>
+                    </div>
+                    <hr>
+                    <h6 class="fw-bold text-success"><i class="fas fa-calendar-check"></i> User's Bookings</h6>
+                    ${user.bookings && user.bookings.length > 0 ? `
+                        <div class="table-responsive mt-2">
+                            <table class="table table-sm table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>Service</th>
+                                        <th>Date</th>
+                                        <th>Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    ${user.bookings.map(b => `
+                                        <tr>
+                                            <td>${b.serviceType}</td>
+                                            <td>${b.preferredDate}</td>
+                                            <td><span class="badge ${b.status == 'PENDING' ? 'badge-pending' : b.status == 'COMPLETED' ? 'badge-completed' : 'badge-cancelled'}">${b.status}</span></td>
+                                        </tr>
+                                    `).join('')}
+                                </tbody>
+                            </table>
+                        </div>
+                    ` : `
+                        <p class="text-muted text-center">No bookings yet.</p>
+                    `}
+                `;
+                new bootstrap.Modal(document.getElementById('viewUserModal')).show();
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Failed to load user details.');
+            });
+    }
+
+    document.getElementById('searchInput').addEventListener('keyup', function(event) {
+        if (event.key === 'Escape') {
+            clearSearch();
+        }
+    });
+</script>
+
+</body>
+</html>

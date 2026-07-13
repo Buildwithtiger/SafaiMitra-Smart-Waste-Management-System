@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Manage Bookings - SafaiMitra</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+
+    <!-- AOS Animation -->
+    <link href="https://unpkg.com/aos@next/dist/aos.css" rel="stylesheet" />
+
+    <!-- External CSS -->
+    <link th:href="@{/css/admin.css}" rel="stylesheet">
+
+    <style>
+        .border-purple { border-left-color: #6c5ce7 !important; }
+        .badge-urgent { background: #dc3545; color: #fff; animation: pulse 1.5s ease-in-out infinite; }
+        @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.6; } }
+        .booking-card { padding: 14px 18px; margin-bottom: 8px; background: #f8f9fa; border-radius: 10px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; border-left: 4px solid #28a745; transition: all 0.3s ease; }
+        .booking-card:hover { background: #ffffff; transform: translateX(4px); box-shadow: 0 2px 10px rgba(0,0,0,0.06); }
+        .booking-card .booking-info { display: flex; flex-wrap: wrap; gap: 12px 25px; }
+        .booking-card .booking-info .label { color: #b2bec3; font-size: 0.6rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; }
+        .booking-card .booking-info .value { color: #2d3436; font-weight: 500; font-size: 0.85rem; }
+        .booking-card .booking-actions { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+        .badge-pending { background: #ffc107; color: #000; padding: 3px 12px; border-radius: 20px; font-weight: 600; font-size: 0.65rem; }
+        .badge-completed { background: #28a745; color: #fff; padding: 3px 12px; border-radius: 20px; font-weight: 600; font-size: 0.65rem; }
+        .badge-cancelled { background: #dc3545; color: #fff; padding: 3px 12px; border-radius: 20px; font-weight: 600; font-size: 0.65rem; }
+        .btn-action { padding: 3px 12px; border-radius: 20px; font-size: 0.65rem; font-weight: 600; text-decoration: none; display: inline-block; border: none; cursor: pointer; transition: all 0.3s ease; }
+        .btn-action:hover { transform: scale(1.05); }
+        .btn-approve { background: #28a745; color: #fff; }
+        .btn-approve:hover { background: #218838; color: #fff; }
+        .btn-reject { background: #dc3545; color: #fff; }
+        .btn-reject:hover { background: #c82333; color: #fff; }
+        .empty-state { text-align: center; padding: 30px 20px; }
+        .empty-state i { font-size: 2.5rem; color: #28a745; opacity: 0.2; margin-bottom: 10px; }
+        .empty-state h5 { color: #2d3436; font-weight: 600; font-size: 1rem; }
+        .empty-state p { color: #b2bec3; font-size: 0.85rem; }
+        .stats-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; margin-bottom: 25px; }
+        .stat-box { background: #f8f9fa; padding: 18px 15px; border-radius: 10px; text-align: center; border: 1px solid #e8e8e8; transition: all 0.3s ease; }
+        .stat-box:hover { background: #ffffff; transform: translateY(-3px); box-shadow: 0 5px 20px rgba(0,0,0,0.08); }
+        .stat-box .stat-icon { font-size: 1.5rem; opacity: 0.3; margin-bottom: 3px; }
+        .stat-box .number { font-size: 2rem; font-weight: 700; color: #28a745; line-height: 1.2; }
+        .stat-box .label { color: #636e72; font-weight: 500; font-size: 0.8rem; }
+        .category-tabs { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 15px; padding-bottom: 12px; border-bottom: 1px solid #e8e8e8; }
+        .category-tab { background: #f8f9fa; border: 1px solid #e8e8e8; color: #636e72; padding: 6px 16px; border-radius: 25px; font-size: 0.8rem; font-weight: 600; cursor: pointer; transition: all 0.3s ease; }
+        .category-tab:hover { background: #e8e8e8; color: #2d3436; }
+        .category-tab.active { background: #28a745; color: #ffffff; border-color: #28a745; }
+        .category-tab .badge-count { background: rgba(255,255,255,0.2); padding: 0px 8px; border-radius: 20px; font-size: 0.65rem; margin-left: 4px; }
+        .category-content { display: none; }
+        .category-content.active { display: block; }
+        .search-box { position: relative; min-width: 280px; }
+        .search-box .search-icon { position: absolute; left: 14px; top: 50%; transform: translateY(-50%); color: #b2bec3; font-size: 0.9rem; }
+        .search-box input { width: 100%; padding: 8px 35px 8px 38px; border-radius: 25px; border: 1px solid #dfe6e9; background: #f8f9fa; color: #2d3436; font-size: 0.85rem; outline: none; transition: all 0.3s ease; }
+        .search-box input:focus { border-color: #28a745; background: #ffffff; box-shadow: 0 0 0 3px rgba(40,167,69,0.08); }
+        .search-box input::placeholder { color: #b2bec3; }
+        .search-box .clear-btn { position: absolute; right: 10px; top: 50%; transform: translateY(-50%); background: none; border: none; color: #b2bec3; cursor: pointer; display: none; padding: 4px 6px; }
+        .search-box .clear-btn:hover { color: #dc3545; }
+        .admin-sidebar { background: #ffffff; width: 240px; min-width: 240px; flex-shrink: 0; border-radius: 12px; padding: 20px 0; border: 1px solid #e8e8e8; box-shadow: 0 2px 10px rgba(0,0,0,0.05); position: sticky; top: 85px; }
+        .admin-sidebar .sidebar-brand { color: #28a745; font-size: 1.2rem; font-weight: 700; text-align: center; padding: 10px 15px 15px; border-bottom: 1px solid #e8e8e8; margin-bottom: 10px; }
+        .admin-sidebar .sidebar-link { color: #555; text-decoration: none; padding: 10px 18px; display: block; border-radius: 8px; margin: 3px 12px; transition: all 0.3s ease; font-size: 0.9rem; }
+        .admin-sidebar .sidebar-link:hover { background: rgba(40,167,69,0.08); color: #28a745; }
+        .admin-sidebar .sidebar-link.active { background: #28a745; color: #ffffff; }
+        .admin-sidebar .sidebar-link i { margin-right: 12px; width: 18px; text-align: center; }
+        .admin-sidebar .sidebar-link.text-danger { color: #dc3545; }
+        .admin-sidebar .sidebar-link.text-danger:hover { background: rgba(220,53,69,0.08); color: #dc3545; }
+        .admin-content { flex: 1; background: #ffffff; border-radius: 12px; padding: 25px 28px; border: 1px solid #e8e8e8; box-shadow: 0 2px 10px rgba(0,0,0,0.05); min-height: 600px; }
+        .admin-content .content-header { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px; }
+        .admin-content .content-header h2 { color: #2d3436; font-weight: 700; font-size: 1.5rem; margin: 0; }
+        .admin-content .content-header h2 i { color: #28a745; margin-right: 10px; }
+        .admin-content hr { border-color: #e8e8e8; margin: 15px 0 20px; }
+        .admin-wrapper { max-width: 1400px; margin: 20px auto; padding: 0 20px; }
+        .admin-container { display: flex; gap: 25px; align-items: flex-start; }
+        .admin-navbar { background: #ffffff !important; box-shadow: 0 2px 10px rgba(0,0,0,0.08); padding: 0.7rem 2rem; position: sticky; top: 0; z-index: 100; }
+        .admin-navbar .navbar-brand { color: #28a745 !important; font-weight: 700; font-size: 1.4rem; }
+        body { background: #f0f2f5; color: #2d3436; font-family: 'Poppins', 'Segoe UI', sans-serif; min-height: 100vh; }
+        @media (max-width: 768px) { .stats-row { grid-template-columns: repeat(2, 1fr); } .admin-container { flex-direction: column; } .admin-sidebar { width: 100%; min-width: unset; position: static; display: flex; flex-wrap: wrap; padding: 12px 15px; align-items: center; } .admin-sidebar .sidebar-brand { border-bottom: none; margin-bottom: 0; padding: 5px 10px; font-size: 1.1rem; } .admin-sidebar nav { display: flex; flex-wrap: wrap; gap: 3px; } .admin-sidebar .sidebar-link { display: inline-block; padding: 6px 14px; margin: 2px 4px; font-size: 0.8rem; } }
+    </style>
+
+</head>
+<body>
+
+<!-- ============================================================ -->
+<!-- ADMIN NAVBAR -->
+<!-- ============================================================ -->
+<nav class="navbar admin-navbar navbar-expand-lg">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="/admin/dashboard">
+            <i class="fas fa-recycle"></i> SafaiMitra - Admin
+        </a>
+        <div>
+            <a href="/" class="btn btn-sm btn-outline-success"><i class="fas fa-home"></i> Home</a>
+            <a href="/logout" class="btn btn-sm btn-outline-danger"><i class="fas fa-sign-out-alt"></i> Logout</a>
+        </div>
+    </div>
+</nav>
+
+<!-- ============================================================ -->
+<!-- ADMIN CONTENT -->
+<!-- ============================================================ -->
+<div class="admin-wrapper">
+    <div class="admin-container">
+
+        <!-- ===== SIDEBAR ===== -->
+        <aside class="admin-sidebar" data-aos="fade-right">
+            <div class="sidebar-brand">
+                <i class="fas fa-recycle"></i> SafaiMitra
+            </div>
+            <nav>
+                <a href="/admin/dashboard" class="sidebar-link">
+                    <i class="fas fa-tachometer-alt"></i> Dashboard
+                </a>
+                <a href="/admin/users" class="sidebar-link">
+                    <i class="fas fa-users"></i> Users
+                </a>
+                <a href="/admin/bookings" class="sidebar-link active">
+                    <i class="fas fa-book"></i> Bookings
+                </a>
+                <a href="/" class="sidebar-link">
+                    <i class="fas fa-home"></i> Home
+                </a>
+                <a href="/logout" class="sidebar-link text-danger">
+                    <i class="fas fa-sign-out-alt"></i> Logout
+                </a>
+            </nav>
+        </aside>
+
+        <!-- ===== MAIN CONTENT ===== -->
+        <main class="admin-content" data-aos="fade-up">
+
+            <!-- Header -->
+            <div class="content-header">
+                <h2><i class="fas fa-book"></i> Manage Bookings</h2>
+                <div class="search-box">
+                    <i class="fas fa-search search-icon"></i>
+                    <input type="text" id="searchInput" placeholder="Search bookings..." oninput="filterBookings()">
+                    <button class="clear-btn" id="clearBtn" onclick="clearSearch()"><i class="fas fa-times"></i></button>
+                </div>
+            </div>
+            <hr>
+
+            <!-- Stats -->
+            <div class="stats-row">
+                <div class="stat-box">
+                    <div class="stat-icon"><i class="fas fa-calendar-check"></i></div>
+                    <div class="number" th:text="${totalBookings}">0</div>
+                    <div class="label">Total Bookings</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-icon"><i class="fas fa-clock"></i></div>
+                    <div class="number" th:text="${pendingCount}">0</div>
+                    <div class="label">Pending</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-icon"><i class="fas fa-check-circle"></i></div>
+                    <div class="number" th:text="${completedCount}">0</div>
+                    <div class="label">Completed</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-icon"><i class="fas fa-times-circle"></i></div>
+                    <div class="number" th:text="${cancelledCount}">0</div>
+                    <div class="label">Cancelled</div>
+                </div>
+            </div>
+
+            <!-- ===== TABS ===== -->
+            <div class="category-tabs" id="categoryTabs">
+                <button class="category-tab active" data-target="all">
+                    📋 All <span class="badge-count" th:text="${totalBookings}"></span>
+                </button>
+                <button class="category-tab" data-target="pending">
+                    ⏳ Pending <span class="badge-count" th:text="${pendingCount}"></span>
+                </button>
+                <button class="category-tab" data-target="completed">
+                    ✅ Completed <span class="badge-count" th:text="${completedCount}"></span>
+                </button>
+                <button class="category-tab" data-target="cancelled">
+                    ❌ Cancelled <span class="badge-count" th:text="${cancelledCount}"></span>
+                </button>
+            </div>
+
+            <!-- ===== TAB CONTENT: ALL ===== -->
+            <div class="category-content active" id="content-all">
+                <div th:each="booking : ${bookings}">
+                    <!-- ✅ Using th:if for each color -->
+                    <div class="booking-card">
+                        <div th:if="${booking.serviceType == 'EMERGENCY'}" style="border-left-color: #dc3545 !important;"></div>
+                        <div th:if="${booking.serviceType == 'CLEANER_SERVICE'}" style="border-left-color: #6c5ce7 !important;"></div>
+                        <div th:if="${booking.serviceType == 'SPECIAL_DISPOSAL'}" style="border-left-color: #ffc107 !important;"></div>
+                        <div th:unless="${booking.serviceType == 'EMERGENCY' or booking.serviceType == 'CLEANER_SERVICE' or booking.serviceType == 'SPECIAL_DISPOSAL'}" style="border-left-color: #28a745 !important;"></div>
+                        <div class="booking-info">
+                            <div>
+                                <div class="label">Service</div>
+                                <div class="value" th:text="${booking.serviceType}">Home Cleaning</div>
+                            </div>
+                            <div>
+                                <div class="label">User</div>
+                                <div class="value" th:text="${booking.user.fullName}">John Doe</div>
+                            </div>
+                            <div>
+                                <div class="label">Date & Time</div>
+                                <div class="value" th:text="${booking.preferredDate} + ' at ' + ${booking.preferredTime}">2025-07-02 at 14:00</div>
+                            </div>
+                            <div>
+                                <div class="label">Address</div>
+                                <div class="value" th:text="${booking.address}">Pune</div>
+                            </div>
+                        </div>
+                        <div class="booking-actions">
+                            <span th:if="${booking.status == 'PENDING'}" class="badge badge-pending">⏳ Pending</span>
+                            <span th:if="${booking.status == 'COMPLETED'}" class="badge badge-completed">✅ Completed</span>
+                            <span th:if="${booking.status == 'CANCELLED'}" class="badge badge-cancelled">❌ Cancelled</span>
+                            <a th:if="${booking.status == 'PENDING'}" th:href="@{/admin/approve/{id}(id=${booking.id})}" class="btn-action btn-approve"><i class="fas fa-check"></i> Approve</a>
+                            <a th:if="${booking.status == 'PENDING'}" th:href="@{/admin/reject/{id}(id=${booking.id})}" class="btn-action btn-reject"><i class="fas fa-times"></i> Reject</a>
+                            <span th:unless="${booking.status == 'PENDING'}" class="text-muted">—</span>
+                        </div>
+                    </div>
+                </div>
+                <div th:if="${#lists.isEmpty(bookings)}" class="empty-state">
+                    <i class="fas fa-calendar-check"></i>
+                    <h5>No Bookings</h5>
+                    <p>There are no bookings to display.</p>
+                </div>
+            </div>
+
+            <!-- ===== TAB CONTENT: PENDING ===== -->
+            <div class="category-content" id="content-pending">
+                <div th:each="booking : ${pendingBookings}">
+                    <div class="booking-card" style="border-left-color: #ffc107 !important;">
+                        <div class="booking-info">
+                            <div>
+                                <div class="label">Service</div>
+                                <div class="value" th:text="${booking.serviceType}">Home Cleaning</div>
+                            </div>
+                            <div>
+                                <div class="label">User</div>
+                                <div class="value" th:text="${booking.user.fullName}">John Doe</div>
+                            </div>
+                            <div>
+                                <div class="label">Date & Time</div>
+                                <div class="value" th:text="${booking.preferredDate} + ' at ' + ${booking.preferredTime}">2025-07-02 at 14:00</div>
+                            </div>
+                            <div>
+                                <div class="label">Address</div>
+                                <div class="value" th:text="${booking.address}">Pune</div>
+                            </div>
+                        </div>
+                        <div class="booking-actions">
+                            <span class="badge badge-pending">⏳ Pending</span>
+                            <a th:href="@{/admin/approve/{id}(id=${booking.id})}" class="btn-action btn-approve"><i class="fas fa-check"></i> Approve</a>
+                            <a th:href="@{/admin/reject/{id}(id=${booking.id})}" class="btn-action btn-reject"><i class="fas fa-times"></i> Reject</a>
+                        </div>
+                    </div>
+                </div>
+                <div th:if="${#lists.isEmpty(pendingBookings)}" class="empty-state">
+                    <i class="fas fa-check-circle"></i>
+                    <h5>No Pending Bookings</h5>
+                    <p>All bookings are resolved.</p>
+                </div>
+            </div>
+
+            <!-- ===== TAB CONTENT: COMPLETED ===== -->
+            <div class="category-content" id="content-completed">
+                <div th:each="booking : ${completedBookings}">
+                    <div class="booking-card" style="border-left-color: #28a745 !important;">
+                        <div class="booking-info">
+                            <div>
+                                <div class="label">Service</div>
+                                <div class="value" th:text="${booking.serviceType}">Home Cleaning</div>
+                            </div>
+                            <div>
+                                <div class="label">User</div>
+                                <div class="value" th:text="${booking.user.fullName}">John Doe</div>
+                            </div>
+                            <div>
+                                <div class="label">Date & Time</div>
+                                <div class="value" th:text="${booking.preferredDate} + ' at ' + ${booking.preferredTime}">2025-07-02 at 14:00</div>
+                            </div>
+                            <div>
+                                <div class="label">Address</div>
+                                <div class="value" th:text="${booking.address}">Pune</div>
+                            </div>
+                        </div>
+                        <div class="booking-actions">
+                            <span class="badge badge-completed">✅ Completed</span>
+                            <span class="text-muted">—</span>
+                        </div>
+                    </div>
+                </div>
+                <div th:if="${#lists.isEmpty(completedBookings)}" class="empty-state">
+                    <i class="fas fa-clock"></i>
+                    <h5>No Completed Bookings</h5>
+                    <p>No bookings have been completed yet.</p>
+                </div>
+            </div>
+
+            <!-- ===== TAB CONTENT: CANCELLED ===== -->
+            <div class="category-content" id="content-cancelled">
+                <div th:each="booking : ${cancelledBookings}">
+                    <div class="booking-card" style="border-left-color: #dc3545 !important;">
+                        <div class="booking-info">
+                            <div>
+                                <div class="label">Service</div>
+                                <div class="value" th:text="${booking.serviceType}">Home Cleaning</div>
+                            </div>
+                            <div>
+                                <div class="label">User</div>
+                                <div class="value" th:text="${booking.user.fullName}">John Doe</div>
+                            </div>
+                            <div>
+                                <div class="label">Date & Time</div>
+                                <div class="value" th:text="${booking.preferredDate} + ' at ' + ${booking.preferredTime}">2025-07-02 at 14:00</div>
+                            </div>
+                            <div>
+                                <div class="label">Address</div>
+                                <div class="value" th:text="${booking.address}">Pune</div>
+                            </div>
+                        </div>
+                        <div class="booking-actions">
+                            <span class="badge badge-cancelled">❌ Cancelled</span>
+                            <span class="text-muted">—</span>
+                        </div>
+                    </div>
+                </div>
+                <div th:if="${#lists.isEmpty(cancelledBookings)}" class="empty-state">
+                    <i class="fas fa-check-circle"></i>
+                    <h5>No Cancelled Bookings</h5>
+                    <p>No bookings have been cancelled.</p>
+                </div>
+            </div>
+
+        </main>
+
+    </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- SCRIPTS -->
+<!-- ============================================================ -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+
+<script>
+    AOS.init({ duration: 800 });
+
+    // ===== TABS =====
+    const tabs = document.querySelectorAll('.category-tab');
+    const contents = document.querySelectorAll('.category-content');
+
+    tabs.forEach(tab => {
+        tab.addEventListener('click', function() {
+            tabs.forEach(t => t.classList.remove('active'));
+            this.classList.add('active');
+            contents.forEach(c => c.classList.remove('active'));
+            const target = this.dataset.target;
+            document.getElementById('content-' + target).classList.add('active');
+        });
+    });
+
+    // ===== SEARCH =====
+    function filterBookings() {
+        const input = document.getElementById('searchInput');
+        const filter = input.value.toLowerCase().trim();
+        const cards = document.querySelectorAll('.booking-card');
+        const clearBtn = document.getElementById('clearBtn');
+
+        if (filter.length > 0) {
+            clearBtn.style.display = 'block';
+        } else {
+            clearBtn.style.display = 'none';
+        }
+
+        cards.forEach(card => {
+            const text = card.textContent.toLowerCase();
+            if (text.includes(filter)) {
+                card.style.display = 'flex';
+            } else {
+                card.style.display = 'none';
+            }
+        });
+    }
+
+    function clearSearch() {
+        document.getElementById('searchInput').value = '';
+        document.getElementById('clearBtn').style.display = 'none';
+        filterBookings();
+    }
+
+    document.getElementById('searchInput').addEventListener('keyup', function(event) {
+        if (event.key === 'Escape') {
+            clearSearch();
+        }
+    });
+</script>
+
+</body>
+</html>

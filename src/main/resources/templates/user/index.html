@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>SafaiMitra - Home</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- Bootstrap -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- AOS Animation -->
+  <link href="https://unpkg.com/aos@next/dist/aos.css" rel="stylesheet" />
+
+  <!-- ✅ EXTERNAL CSS -->
+  <link th:href="@{/css/style.css}" rel="stylesheet">
+
+</head>
+<body>
+
+<!-- ============================================================ -->
+<!-- NAVBAR -->
+<!-- ============================================================ -->
+<nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm px-4">
+  <a class="navbar-brand" href="/">
+    <i class="fas fa-recycle icon text-success"></i> <span>SafaiMitra</span>
+  </a>
+  <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  <div class="collapse navbar-collapse justify-content-end" id="navbarContent">
+    <div class="d-flex gap-2 mt-2 mt-lg-0 align-items-center">
+      <a href="/" class="btn btn-sm btn-outline-primary">
+        <i class="fas fa-home"></i>
+      </a>
+      <div class="dropdown">
+        <button class="btn btn-sm btn-outline-success dropdown-toggle" data-bs-toggle="dropdown">
+          <i class="fas fa-globe"></i>
+        </button>
+        <ul class="dropdown-menu">
+          <li><a class="dropdown-item" href="#" onclick="setLanguage('en')">English</a></li>
+          <li><a class="dropdown-item" href="#" onclick="setLanguage('hi')">हिंदी</a></li>
+          <li><a class="dropdown-item" href="#" onclick="setLanguage('mr')">मराठी</a></li>
+        </ul>
+      </div>
+      <div class="dropdown">
+        <a class="btn btn-sm btn-outline-primary dropdown-toggle" href="#" data-bs-toggle="dropdown">
+          <i class="fas fa-cog"></i>
+        </a>
+        <ul class="dropdown-menu">
+          <li><a class="dropdown-item" href="/profile"><i class="fas fa-user"></i> Profile</a></li>
+          <li><a class="dropdown-item" href="/my-schedule"><i class="fas fa-calendar"></i> Your Schedule</a></li>
+          <li><hr class="dropdown-divider"></li>
+          <li><a class="dropdown-item text-danger" href="/logout"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<!-- ============================================================ -->
+<!-- HERO SECTION -->
+<!-- ============================================================ -->
+<section class="hero">
+  <div class="hero-slideshow" id="heroSlideshow">
+    <div class="slide active" style="background-image: url('https://images.unsplash.com/photo-1603969409447-48b6e3a1c00c?auto=format&fit=crop&w=1600&q=80');"></div>
+    <div class="slide" style="background-image: url('https://images.unsplash.com/photo-1576765607924-c3b7e9008c6c?fit=crop&w=1600&q=80');"></div>
+    <div class="slide" style="background-image: url('https://images.unsplash.com/photo-1603252108932-e09f9584f128?fit=crop&w=1600&q=80');"></div>
+    <div class="slide" style="background-image: url('https://images.unsplash.com/photo-1616787437303-40aaf88cf0be?fit=crop&w=1600&q=80');"></div>
+  </div>
+
+  <div class="content">
+    <h1 class="display-5 fw-bold">Let's Clean Together!</h1>
+    <p class="lead">Book your next waste pickup in one click and make your city cleaner.</p>
+    <a href="/schedule" class="btn btn-success mt-3 btn-lg">
+      <i class="fas fa-calendar-plus"></i> Schedule Pickup
+    </a>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- QUICK ACTIONS -->
+<!-- ============================================================ -->
+<section class="container text-center my-5 py-4">
+  <h3 class="mb-5 display-6 fw-bold text-success" data-aos="fade-right">
+    <i class="fas fa-bolt"></i> Quick Actions
+  </h3>
+  <div class="row g-4 justify-content-center">
+    <div class="col-md-3 col-sm-6" data-aos="zoom-in" data-aos-delay="100">
+      <div class="card action-card shadow-sm p-3">
+        <img src="https://images.unsplash.com/photo-1605600659876-2e9af0f7aa94?w=400&h=200&fit=crop" alt="Emergency">
+        <div class="mt-2">
+          <a href="/emergency" class="btn btn-outline-danger">🚨 Emergency</a>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3 col-sm-6" data-aos="zoom-in" data-aos-delay="200">
+      <div class="card action-card shadow-sm p-3">
+        <img src="https://images.unsplash.com/photo-1584820927498-cfe5211fd8bf?w=400&h=200&fit=crop" alt="Cleaner">
+        <div class="mt-2">
+          <a href="/cleaner/request" class="btn btn-outline-primary">🧹 Cleaner Man</a>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3 col-sm-6" data-aos="zoom-in" data-aos-delay="300">
+      <div class="card action-card shadow-sm p-3">
+        <img src="https://images.unsplash.com/photo-1532996122724-e3c354a0b15b?w=400&h=200&fit=crop" alt="Special Disposal">
+        <div class="mt-2">
+          <a href="/disposal/special" class="btn btn-outline-warning">🧪 Special Disposal</a>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3 col-sm-6" data-aos="zoom-in" data-aos-delay="400">
+      <div class="card action-card shadow-sm p-3">
+        <img src="https://images.unsplash.com/photo-1550338861-b7cfeaf8ffd8?w=400&h=200&fit=crop" alt="Subscription">
+        <div class="mt-2">
+          <a href="/subscription" class="btn btn-outline-success">📅 Subscription</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- SERVICES SLIDER -->
+<!-- ============================================================ -->
+<section class="container my-5 py-4" data-aos="fade-up">
+  <h3 class="text-center mb-4 display-6 fw-bold text-success">🌟 Our Services</h3>
+
+  <div id="servicesCarousel" class="carousel slide" data-bs-ride="carousel" data-bs-interval="5000">
+    <div class="carousel-inner">
+
+      <!-- Slide 1 - Schedule Pickup -->
+      <div class="carousel-item active">
+        <div class="row align-items-center">
+          <div class="col-md-6">
+            <h4 class="fw-bold text-success">📅 Schedule Pickup</h4>
+            <p>Book your waste pickup in just a few clicks. Choose your preferred date, time, and service type.</p>
+            <a href="/schedule" class="btn btn-success btn-sm mt-2">Schedule Now →</a>
+          </div>
+          <div class="col-md-6 text-center">
+            <img src="https://img.icons8.com/fluency/300/calendar-plus.png" class="img-fluid rounded service-img" alt="Schedule Pickup">
+          </div>
+        </div>
+      </div>
+
+      <!-- Slide 2 - Cleaner Man -->
+      <div class="carousel-item">
+        <div class="row align-items-center">
+          <div class="col-md-6">
+            <h4 class="fw-bold text-primary">🧹 Cleaner Man Service</h4>
+            <p>Professional cleaning services for homes, schools, colleges, and workplaces.</p>
+            <a href="/cleaner/request" class="btn btn-primary btn-sm mt-2">Request Cleaner →</a>
+          </div>
+          <div class="col-md-6 text-center">
+            <img src="https://img.icons8.com/fluency/300/broom.png" class="img-fluid rounded service-img" alt="Cleaner Man">
+          </div>
+        </div>
+      </div>
+
+      <!-- Slide 3 - Emergency -->
+      <div class="carousel-item">
+        <div class="row align-items-center">
+          <div class="col-md-6">
+            <h4 class="fw-bold text-danger">🚨 Emergency Services</h4>
+            <p>24/7 emergency assistance for urgent waste management issues.</p>
+            <a href="/emergency" class="btn btn-danger btn-sm mt-2">Emergency →</a>
+          </div>
+          <div class="col-md-6 text-center">
+            <img src="https://img.icons8.com/fluency/300/emergency.png" class="img-fluid rounded service-img" alt="Emergency">
+          </div>
+        </div>
+      </div>
+
+      <!-- Slide 4 - Special Disposal -->
+      <div class="carousel-item">
+        <div class="row align-items-center">
+          <div class="col-md-6">
+            <h4 class="fw-bold" style="color: #ff6d00;">🧪 Special Disposal</h4>
+            <p>Safe disposal of hazardous, electronic, medical, and organic waste.</p>
+            <a href="/disposal/special" class="btn btn-sm mt-2" style="background: #ff6d00; color: white;">Special Disposal →</a>
+          </div>
+          <div class="col-md-6 text-center">
+            <img src="https://img.icons8.com/fluency/300/recycle.png" class="img-fluid rounded service-img" alt="Special Disposal">
+          </div>
+        </div>
+      </div>
+
+      <!-- Slide 5 - Subscription -->
+      <div class="carousel-item">
+        <div class="row align-items-center">
+          <div class="col-md-6">
+            <h4 class="fw-bold text-warning">📅 Subscription Plans</h4>
+            <p>Choose from flexible subscription plans for regular waste management.</p>
+            <a href="/subscription" class="btn btn-warning btn-sm mt-2">View Plans →</a>
+          </div>
+          <div class="col-md-6 text-center">
+            <img src="https://img.icons8.com/fluency/300/crown.png" class="img-fluid rounded service-img" alt="Subscription">
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <button class="carousel-control-prev" type="button" data-bs-target="#servicesCarousel" data-bs-slide="prev">
+      <span class="carousel-control-prev-icon"></span>
+    </button>
+    <button class="carousel-control-next" type="button" data-bs-target="#servicesCarousel" data-bs-slide="next">
+      <span class="carousel-control-next-icon"></span>
+    </button>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- MAP -->
+<!-- ============================================================ -->
+<!-- ============================================================ -->
+<!-- MAP -->
+<!-- ============================================================ -->
+<section class="container my-5 py-4" data-aos="fade-up">
+  <h3 class="text-center mb-4 display-6 fw-bold text-success">🗺️ Live City Map - Rajgurunagar Taluka</h3>
+  <div id="map" class="map-container" style="height: 500px; border-radius: 12px; overflow: hidden;"></div>
+  <p class="text-center mt-3 text-muted map-description">🔍 Tracking live location of waste collection points in Rajgurunagar.</p>
+</section>
+
+<script>
+  function initMap() {
+      const rajgurunagar = { lat: 18.866, lng: 73.889 };
+
+      const map = new google.maps.Map(document.getElementById("map"), {
+          zoom: 14,
+          center: rajgurunagar,
+          mapTypeId: "roadmap"
+      });
+
+      // Waste locations
+      const locations = [
+          { lat: 18.867, lng: 73.890, title: "🧹 Garbage Collection Center" },
+          { lat: 18.869, lng: 73.887, title: "♻️ RecycleMart Pvt. Ltd." },
+          { lat: 18.865, lng: 73.892, title: "🧴 E-Waste Drop Zone" },
+          { lat: 18.864, lng: 73.894, title: "🌱 Compost Facility" },
+          { lat: 18.862, lng: 73.888, title: "🚛 Dumping Yard" },
+          { lat: 18.868, lng: 73.885, title: "🏥 Medical Waste Disposal" },
+          { lat: 18.866, lng: 73.889, title: "🚌 Rajgurunagar Bus Station" }
+      ];
+
+      locations.forEach(loc => {
+          new google.maps.Marker({
+              position: { lat: loc.lat, lng: loc.lng },
+              map: map,
+              title: loc.title,
+              icon: "https://maps.google.com/mapfiles/ms/icons/green-dot.png"
+          });
+      });
+  }
+</script>
+
+<!-- ✅ UPDATED WITH YOUR NEW API KEY -->
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB1QcoBmfqIi-i9Gf_T9rvTpXBTRAEdB1M&callback=initMap" async defer></script></section>
+
+<!-- ============================================================ -->
+<!-- FOOTER -->
+<!-- ============================================================ -->
+<footer class="text-center">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-4 mb-3 mb-md-0">
+        <h5 class="text-success">♻️ SafaiMitra</h5>
+        <p class="text-muted">Innovating waste management for a cleaner, greener future.</p>
+      </div>
+      <div class="col-md-4 mb-3 mb-md-0">
+        <h5 class="text-white">Quick Links</h5>
+        <ul class="list-unstyled">
+          <li><a href="#">About Us</a></li>
+          <li><a href="#">Services</a></li>
+          <li><a href="#">Privacy Policy</a></li>
+          <li><a href="#">Terms of Service</a></li>
+        </ul>
+      </div>
+      <div class="col-md-4">
+        <h5 class="text-white">Connect With Us</h5>
+        <div class="social-icons">
+          <a href="#"><i class="fab fa-facebook-f"></i></a>
+          <a href="#"><i class="fab fa-twitter"></i></a>
+          <a href="#"><i class="fab fa-instagram"></i></a>
+          <a href="#"><i class="fab fa-linkedin-in"></i></a>
+        </div>
+      </div>
+    </div>
+    <hr class="my-4 border-secondary">
+    <p class="mb-0 text-muted">&copy; 2025 SafaiMitra. All rights reserved.</p>
+  </div>
+</footer>
+
+<!-- ============================================================ -->
+<!-- CHATBOT -->
+<!-- ============================================================ -->
+<button class="chatbot-btn" onclick="toggleChat()">
+  <i class="fas fa-comment-dots"></i>
+</button>
+
+<div class="chatbot-window" id="chatbotWindow">
+  <div class="chatbot-header">
+    <i class="fas fa-robot me-2"></i> SafaiMitra Assistant
+  </div>
+  <div class="chatbot-body" id="chatBody">
+    <div><strong>Bot:</strong> Hi! Need help with scheduling, emergencies, or services?</div>
+  </div>
+  <div class="chatbot-input">
+    <input type="text" id="userInput" placeholder="Ask me anything..." />
+    <button onclick="sendMessage()"><i class="fas fa-paper-plane"></i></button>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- SCRIPTS -->
+<!-- ============================================================ -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+
+<script>
+  AOS.init({ duration: 1000 });
+
+  document.addEventListener("DOMContentLoaded", function() {
+      const slides = document.querySelectorAll("#heroSlideshow .slide");
+      let current = 0;
+      function showSlide(index) {
+          slides.forEach((slide, i) => {
+              slide.classList.toggle("active", i === index);
+          });
+      }
+      function nextSlide() {
+          current = (current + 1) % slides.length;
+          showSlide(current);
+      }
+      showSlide(current);
+      setInterval(nextSlide, 5000);
+  });
+
+  function toggleChat() {
+      document.getElementById('chatbotWindow').classList.toggle('show');
+  }
+
+  function sendMessage() {
+      const input = document.getElementById("userInput");
+      const message = input.value.trim();
+      if (!message) return;
+      const chatBody = document.getElementById("chatBody");
+      const userMsg = document.createElement("div");
+      userMsg.innerHTML = `<strong>You:</strong> ${message}`;
+      chatBody.appendChild(userMsg);
+      input.value = "";
+      chatBody.scrollTop = chatBody.scrollHeight;
+      setTimeout(() => {
+          const botMsg = document.createElement("div");
+          botMsg.innerHTML = `<strong>Bot:</strong> ${generateBotReply(message)}`;
+          chatBody.appendChild(botMsg);
+          chatBody.scrollTop = chatBody.scrollHeight;
+      }, 600);
+  }
+
+  function generateBotReply(msg) {
+      msg = msg.toLowerCase();
+      if (msg.includes("schedule") || msg.includes("pickup")) {
+          return "📅 You can schedule a pickup using the 'Schedule Pickup' button.";
+      } else if (msg.includes("emergency")) {
+          return "🚨 Use the 'Emergency' button for immediate assistance.";
+      } else if (msg.includes("map") || msg.includes("location")) {
+          return "🗺️ The map shows current garbage vehicle locations.";
+      } else if (msg.includes("cleaner") || msg.includes("clean")) {
+          return "🧹 Click on 'Cleaner Man' to request a cleaner.";
+      } else if (msg.includes("disposal")) {
+          return "🧪 Use 'Special Disposal' for e-waste, medical, or chemical waste.";
+      } else {
+          return "🤖 I'm here to assist! Ask about pickup, services, emergencies, or the live map.";
+      }
+  }
+
+  function setLanguage(lang) {
+      const messages = { 'en': { 'brand': 'SafaiMitra' }, 'hi': { 'brand': 'सफाईमित्र' }, 'mr': { 'brand': 'सफाईमित्र' } };
+      const text = messages[lang] || messages['en'];
+      document.querySelector('.navbar-brand span').textContent = text.brand;
+  }
+</script>
+
+</body>
+</html>

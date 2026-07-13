@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Subscription - SafaiMitra</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+
+    <!-- AOS Animation -->
+    <link href="https://unpkg.com/aos@next/dist/aos.css" rel="stylesheet" />
+
+    <!-- External CSS -->
+    <link th:href="@{/css/style.css}" rel="stylesheet">
+
+    <style>
+        .plan-card {
+            background: #f8f9fa;
+            border-radius: 16px;
+            padding: 25px;
+            text-align: center;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+            height: 100%;
+        }
+        .plan-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 40px rgba(0,0,0,0.08);
+        }
+        .plan-card.popular {
+            border-color: #28a745;
+            background: #ffffff;
+        }
+        .plan-card.popular .badge-popular {
+            background: #28a745;
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+        .plan-card .price {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: #28a745;
+        }
+        .plan-card .price span {
+            font-size: 1rem;
+            color: #888888;
+        }
+        .plan-card .plan-name {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: #333333;
+        }
+        .plan-card .features {
+            list-style: none;
+            padding: 0;
+            text-align: left;
+        }
+        .plan-card .features li {
+            padding: 8px 0;
+            color: #555555;
+            border-bottom: 1px solid #f0f0f0;
+        }
+        .plan-card .features li:last-child {
+            border-bottom: none;
+        }
+        .plan-card .features li i {
+            color: #28a745;
+            margin-right: 10px;
+        }
+        .plan-card .btn-subscribe {
+            border-radius: 50px;
+            padding: 10px 30px;
+            font-weight: 600;
+            width: 100%;
+            transition: all 0.3s ease;
+        }
+        .plan-card .btn-subscribe:hover {
+            transform: translateY(-2px);
+        }
+        .plan-card .btn-subscribe:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none !important;
+        }
+    </style>
+</head>
+<body>
+
+<!-- ============================================================ -->
+<!-- NAVBAR -->
+<!-- ============================================================ -->
+<div th:replace="~{fragments/navbar :: navbar}"></div>
+
+<!-- ============================================================ -->
+<!-- TOAST / POPUP CONTAINER -->
+<!-- ============================================================ -->
+<div class="toast-container" id="toastContainer">
+    <!-- Success Toast -->
+    <div th:if="${success}" class="toast-custom" id="successToast">
+        <div class="toast-icon success">
+            <i class="fas fa-check-circle"></i>
+        </div>
+        <div class="toast-content">
+            <div class="toast-title">✅ Success!</div>
+            <div class="toast-message" th:text="${success}">Subscription successful!</div>
+        </div>
+        <button class="toast-close" onclick="closeToast(this)">&times;</button>
+    </div>
+
+    <!-- Error Toast -->
+    <div th:if="${error}" class="toast-custom error" id="errorToast">
+        <div class="toast-icon error">
+            <i class="fas fa-exclamation-circle"></i>
+        </div>
+        <div class="toast-content">
+            <div class="toast-title">❌ Oops!</div>
+            <div class="toast-message" th:text="${error}">Something went wrong!</div>
+        </div>
+        <button class="toast-close" onclick="closeToast(this)">&times;</button>
+    </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- SUBSCRIPTION PLANS -->
+<!-- ============================================================ -->
+<div class="container my-5 py-4">
+    <h2 class="text-center text-success fw-bold" data-aos="fade-down">
+        <i class="fas fa-crown"></i> Choose Your Plan
+    </h2>
+    <p class="text-center text-muted mb-5">Flexible subscription plans for all your waste management needs</p>
+
+    <div class="row g-4 justify-content-center">
+
+        <!-- Basic Plan -->
+        <div class="col-md-4" data-aos="flip-up" data-aos-delay="100">
+            <div class="plan-card">
+                <div class="plan-name">Basic</div>
+                <div class="price">₹299 <span>/month</span></div>
+                <hr>
+                <ul class="features">
+                    <li><i class="fas fa-check-circle"></i> 2 Pickups per month</li>
+                    <li><i class="fas fa-check-circle"></i> Home Cleaning</li>
+                    <li><i class="fas fa-check-circle"></i> Email Support</li>
+                    <li><i class="fas fa-times-circle" style="color: #dc3545;"></i> GPS Tracking</li>
+                    <li><i class="fas fa-times-circle" style="color: #dc3545;"></i> Priority Support</li>
+                </ul>
+                <button class="btn btn-outline-success btn-subscribe" onclick="subscribePlan('Basic', 299)">
+                    <i class="fas fa-check"></i> Subscribe
+                </button>
+            </div>
+        </div>
+
+        <!-- Premium Plan (Popular) -->
+        <div class="col-md-4" data-aos="flip-up" data-aos-delay="200">
+            <div class="plan-card popular">
+                <div class="badge-popular mb-2">⭐ Most Popular</div>
+                <div class="plan-name">Premium</div>
+                <div class="price">₹599 <span>/month</span></div>
+                <hr>
+                <ul class="features">
+                    <li><i class="fas fa-check-circle"></i> 8 Pickups per month</li>
+                    <li><i class="fas fa-check-circle"></i> Home + Office Cleaning</li>
+                    <li><i class="fas fa-check-circle"></i> Priority Support</li>
+                    <li><i class="fas fa-check-circle"></i> GPS Tracking</li>
+                    <li><i class="fas fa-check-circle"></i> Special Disposal</li>
+                </ul>
+                <button class="btn btn-success btn-subscribe" onclick="subscribePlan('Premium', 599)">
+                    <i class="fas fa-check"></i> Subscribe Now
+                </button>
+            </div>
+        </div>
+
+        <!-- Enterprise Plan -->
+        <div class="col-md-4" data-aos="flip-up" data-aos-delay="300">
+            <div class="plan-card">
+                <div class="plan-name">Enterprise</div>
+                <div class="price">₹999 <span>/month</span></div>
+                <hr>
+                <ul class="features">
+                    <li><i class="fas fa-check-circle"></i> Unlimited Pickups</li>
+                    <li><i class="fas fa-check-circle"></i> Full Service Package</li>
+                    <li><i class="fas fa-check-circle"></i> 24/7 Priority Support</li>
+                    <li><i class="fas fa-check-circle"></i> Live GPS Tracking</li>
+                    <li><i class="fas fa-check-circle"></i> Custom Reports</li>
+                </ul>
+                <button class="btn btn-outline-success btn-subscribe" onclick="subscribePlan('Enterprise', 999)">
+                    <i class="fas fa-headset"></i> Contact Us
+                </button>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- FOOTER -->
+<!-- ============================================================ -->
+<div th:replace="~{fragments/footer :: footer}"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+<script>
+    // ===== AOS INIT =====
+    AOS.init({ duration: 1000 });
+
+    // ===== CLOSE TOAST =====
+    function closeToast(button) {
+        const toast = button.closest('.toast-custom');
+        if (toast) {
+            toast.classList.add('hiding');
+            setTimeout(() => {
+                if (toast.parentNode) {
+                    toast.remove();
+                }
+            }, 400);
+        }
+    }
+
+    // ===== SHOW TOAST AND REDIRECT TO HOME =====
+    function showToastAndRedirect(message, type, planName) {
+        // Remove existing toasts
+        const existingToasts = document.querySelectorAll('.toast-custom');
+        existingToasts.forEach(t => t.remove());
+
+        // Create toast container if not exists
+        let container = document.getElementById('toastContainer');
+        if (!container) {
+            container = document.createElement('div');
+            container.id = 'toastContainer';
+            container.className = 'toast-container';
+            document.body.appendChild(container);
+        }
+
+        // Create toast
+        const toast = document.createElement('div');
+        toast.className = 'toast-custom';
+        if (type === 'error') {
+            toast.classList.add('error');
+        }
+        toast.innerHTML = `
+            <div class="toast-icon ${type === 'error' ? 'error' : 'success'}">
+                <i class="fas ${type === 'error' ? 'fa-exclamation-circle' : 'fa-check-circle'}"></i>
+            </div>
+            <div class="toast-content">
+                <div class="toast-title">${type === 'error' ? '❌ Oops!' : '✅ ' + planName + ' Plan Activated!'}</div>
+                <div class="toast-message">${message}</div>
+            </div>
+            <button class="toast-close" onclick="closeToast(this)">&times;</button>
+        `;
+        container.appendChild(toast);
+
+        // Auto close after 3 seconds and redirect
+        setTimeout(() => {
+            toast.classList.add('hiding');
+            setTimeout(() => {
+                toast.remove();
+                // Redirect to home page
+                window.location.href = '/';
+            }, 400);
+        }, 3000);
+    }
+
+    // ===== SUBSCRIBE PLAN =====
+    function subscribePlan(planName, price) {
+        // Disable all buttons
+        document.querySelectorAll('.btn-subscribe').forEach(btn => {
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing...';
+        });
+
+        // Simulate API call
+        setTimeout(() => {
+            // Show success toast
+            showToastAndRedirect(
+                'You have successfully subscribed to the ' + planName + ' plan for ₹' + price + '/month. Welcome to SafaiMitra! 🎉',
+                'success',
+                planName
+            );
+        }, 1500);
+    }
+</script>
+
+</body>
+</html>
